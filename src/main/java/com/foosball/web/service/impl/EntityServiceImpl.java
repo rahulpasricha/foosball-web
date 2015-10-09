@@ -9,24 +9,27 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.foosball.web.bean.jpa.UserEntity;
-import com.foosball.web.controller.dao.UserDao;
+import com.foosball.web.bean.jpa.TeamBo;
+import com.foosball.web.bean.jpa.UserBo;
+import com.foosball.web.controller.dao.EntityDao;
+import com.foosball.web.exception.FoosballException;
+import com.foosball.web.model.Team;
 import com.foosball.web.model.User;
-import com.foosball.web.service.UserService;
+import com.foosball.web.service.EntityService;
 
-@Service("userService")
+@Service("entityService")
 @Transactional
-public class UserServiceImpl implements UserService {
+public class EntityServiceImpl implements EntityService {
 
 	@Resource
-	UserDao userDao;
+	EntityDao entityDao;
 	
 	@Override
 	public List<User> getAllFoosballusers() {
 		List<User> users = new ArrayList<User>();
 		
-		List<UserEntity> entities = userDao.getAllFoosballusers();
-		for (UserEntity entity : entities) {
+		List<UserBo> entities = entityDao.getAllFoosballusers();
+		for (UserBo entity : entities) {
 			User user = new User();
 			user.setFirstName(entity.getFirstName());
 			user.setLastName(entity.getLastName());
@@ -38,7 +41,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public User getUser(String userName) {
-		UserEntity userEntity = userDao.getUser(userName);
+		UserBo userEntity = entityDao.getUser(userName);
 		
 		if (userEntity == null) {
 			return null;
@@ -55,14 +58,14 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public User create(User user) throws UserAlreadyExistsException {
-		UserEntity userEntity = userDao.getUser(user.getUsername());
+	public User create(User user) throws FoosballException {
+		UserBo userEntity = entityDao.getUser(user.getUsername());
 		
 		if (userEntity != null) {
-			throw new UserAlreadyExistsException("User already present in the system");
+			throw new FoosballException("User already present in the system");
 		}
 		
-		userEntity = new UserEntity();
+		userEntity = new UserBo();
 		userEntity.setUsername(user.getUsername());
 		userEntity.setPassword(user.getPassword());
 		userEntity.setFirstName(user.getFirstName());
@@ -70,9 +73,31 @@ public class UserServiceImpl implements UserService {
 		userEntity.setRole("ROLE_USER");
 		userEntity.setLevel(0);
 		
-		userDao.save(userEntity);
+		entityDao.save(userEntity);
 		
 		return user;
+	}
+	
+	@Override
+	public List<Team> getAllTeams() {
+		List<TeamBo> teams = entityDao.getAllTeams();
+		
+		List<Team> allTeams = new ArrayList<Team>();
+		for (TeamBo eachTeam : teams) {
+			allTeams.add(new Team(eachTeam.getName()));
+		}
+		
+		return allTeams;
+	}
+	
+	@Override
+	public boolean resetPassword(User user) throws FoosballException {
+		int count = entityDao.resetPassword(user.getUsername(), user.getPassword());
+		
+		if (count == 0) {
+			throw new FoosballException("Reset password failed. Entered username doesn't exists.");
+		}
+		return true;
 	}
 	
 	@Override

@@ -48,7 +48,7 @@
 			}
 			.alert-info {
 				color: #6C6D71;
-				background-color: #FFEA19;
+				background-color: #FFFD9C;
 				border-color: #F1E157;
 			}
         </style>
@@ -70,6 +70,7 @@
 					<ul class="nav navbar-nav">
 						<li class="active"><a href="home">DHL Foosball Tournament Home</a></li>
 						<li><a href="signup">Sign In</a></li>
+						<li><a href="resetpassword">Reset Password</a></li>
 				   </ul>
 				</div>           
 			</nav>
@@ -86,12 +87,12 @@
 						<div id="minimal">
 							<script>
 								$(document).ready(function() {
-									//Handles menu drop down
-									$('.dropdown-menu').find('form').click(function (e) {
-										e.stopPropagation();
-									});
-									
-									$.ajax({
+										//Handles menu drop down
+										$('.dropdown-menu').find('form').click(function (e) {
+											e.stopPropagation();
+										});
+										
+										$.ajax({
 											type: 'GET',
 											url: 'getfoosball.html',
 											contentType: 'application/json; charset=utf-8',
@@ -107,7 +108,7 @@
 												'<Strong>Failed to the load tournament bracket.' +
 												'</strong> Contact the site admins.</div>');
 											}							
-									  });
+									  	});
 									
 										$.ajax({
 											type: 'GET',
@@ -115,16 +116,55 @@
 											contentType: 'application/json; charset=utf-8',
 											dataType: 'json',
 											success: function(result) {
+												$('#playerMessageDiv').html('');
 												var tableHtml = '<table class="table table-bordered table-striped table-hover"><th>Players</th></tr></thead><tbody>';
 												 $.each(result, function (index, value) {
 													 tableHtml += '<tr><td>' + value.firstName + ' ' + value.lastName + '</td>';
 												 });
 												 tableHtml += '</tbody></table>';
 												 $(tableHtml).appendTo($('#listOfPlayers'));
+												 
+												 $('#playerMessageDiv').append('<div class="alert alert-info" role="alert"><strong>'+ result.length 
+														 +' user(s) have registered.</strong> Click here to sign up <a href="signup">Sign Up<a></div>');
 											},error:function(jqXHR, textStatus, errorThrown){
-												
+												var errorFromServer;
+												if(jqXHR.responseText !== ''){
+													errorFromServer = jqXHR.responseText;
+											    } else {
+											    	errorFromServer = errorThrown;
+											    }
+												$('#playerMessageDiv').append('<div class="alert alert-danger" role="alert">Failed : <strong>' + errorFromServer + '</strong></div>');
 											}							
-									  });
+									  	});
+									
+										$.ajax({
+											type: 'GET',
+											url: 'getAllTeams.fd',
+											contentType: 'application/json; charset=utf-8',
+											dataType: 'json',
+											success: function(result) {
+												$('#teamMessageDiv').html('');
+												var tableHtml = '<table class="table table-bordered table-striped table-hover"><th>Team Name</th></tr></thead><tbody>';
+												 $.each(result, function (index, value) {
+													 tableHtml += '<tr><td>' + value.name + '</td>';
+												 });
+												 tableHtml += '</tbody></table>';
+												 $(tableHtml).appendTo($('#listOfTeams'));
+												 
+												 $('#teamMessageDiv').append('<div class="alert alert-info" role="alert"><strong>'+ result.length 
+														 +' teams(s) are present.</strong> Teams will drawn shortly once all the players register and' +
+														 ' and rate their opponents,<a></div>');
+											},error:function(jqXHR, textStatus, errorThrown){
+												var errorFromServer;
+												if(jqXHR.responseText !== ''){
+													errorFromServer = jqXHR.responseText;
+											    } else {
+											    	errorFromServer = errorThrown;
+											    }
+												$('#teamMessageDiv').append('<div class="alert alert-danger" role="alert">Failed : <strong>' + errorFromServer + '</strong></div>');
+											}							
+									  	});
+										
 								});
 							</script>
 						</div>
@@ -138,29 +178,9 @@
 						<h2><span class="label label-info">Teams</span></h2>
 					</div>
 					<br>
-					<div class="row">
-						<table class="table table-bordered table-striped table-hover">
-							<thead>
-								<tr>
-									<th>Team</th>
-									<th>Players</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>Team 1</td>
-									<td>John / Doe</td>
-								</tr>
-								<tr>
-									<td>Team 2</td>
-									<td>Tom / Cruise</td>
-								</tr>
-								<tr>
-									<td>Team 3</td>
-									<td>Brad / Pitt</td>
-								</tr>
-							</tbody>
-						</table>
+					<div class="row" id="listOfTeams">
+					</div>
+					<div class="row" id="teamMessageDiv">
 					</div>
 				</div>
 				<div class="col-sm-4 col-xs-offset-1">
@@ -169,6 +189,8 @@
 					</div>
 					<br>
 					<div class="row" id="listOfPlayers">
+					</div>
+					<div class="row" id="playerMessageDiv">
 					</div>
 				</div>
 			</div>

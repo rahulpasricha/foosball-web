@@ -66,12 +66,16 @@
 					var errorMessage;
 					if (username == '') {
 						errorMessage = '<div class="alert alert-danger" role="alert"><strong>Please enter a username</strong></div>';
+						$("#username").focus();
 					} else if (password == '') {
 						errorMessage = '<div class="alert alert-danger" role="alert"><strong>Please enter a password</strong></div>';
+						$("#password").focus();
 					} else if (firstname == '') {
 						errorMessage = '<div class="alert alert-danger" role="alert"><strong>Please enter your first name</strong></div>';
+						$('#firstName').focus();
 					} else if (lastname == '') {
 						errorMessage = '<div class="alert alert-danger" role="alert"><strong>Please enter your last name</strong></div>';
+						$('#lastName').focus();
 					}
 					$('#messageDiv').append(errorMessage);
 					
@@ -91,7 +95,13 @@
 								$('#lastName').val('');
 								$('#messageDiv').append('<div class="alert alert-success" role="alert">User Created Successfully. Please remember your username : <strong>' + result.username + '</strong></div>');
 							},error:function(jqXHR, textStatus, errorThrown){
-								$('#messageDiv').append('<div class="alert alert-danger" role="alert">Failed : <strong>' + errorThrown + '</strong></div>');
+								var errorFromServer;
+								if(jqXHR.responseText !== ''){
+									errorFromServer = jqXHR.responseText;
+							    } else {
+							    	errorFromServer = errorThrown;
+							    }
+								$('#messageDiv').append('<div class="alert alert-danger" role="alert">Failed : <strong>' + errorFromServer + '</strong></div>');
 							}			
 						});
 					}	
@@ -127,6 +137,7 @@
 					<ul class="nav navbar-nav">
 						<li><a href="home">DHL Foosball Tournament Home</a></li>
 						<li class="active"><a href="${contextPath}/signup">Sign In</a></li>
+						<li><a href="resetpassword">Reset Password</a></li>
 					</ul>
 				</div>            
 			</nav>

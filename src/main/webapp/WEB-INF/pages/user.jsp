@@ -48,7 +48,7 @@
 			}
 			.alert-info {
 				color: #6C6D71;
-				background-color: #FFEA19;
+				background-color: #FFFD9C;
 				border-color: #F1E157;
 			}
 			a#logout {

@@ -1,3 +1,6 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@page session="true"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -52,23 +55,32 @@
 				});
 				
 				$("#resetForm").submit(function( event ) {
+					
+					event.preventDefault();
+					
 					$('#messageDiv').html('');
 					var username = $( "#username" ).val();
 					var password = $( "#newPassword" ).val();
 					
-					var formArray = $('#loginForm').serializeArray();
-					var formJson = $.toJSON(formArray);
+					var formArray = $('#resetForm').serializeArray();
+					var formJson = '{ "username": "' + username + '", "password": "' + password + '" }';
 					
 					$.ajax ({
 						type: 'POST',
 						contentType: 'application/json; charset=utf-8',
 						data: formJson,
-						url: '../resetpassword',
+						url: 'resetPassword.fd',
 						dataType: 'json',												
 						success: function(result) {
-
+							$('#messageDiv').append('<div class="alert alert-info" role="alert"><strong>Password Updated Successfully.</strong></div>');
 						},error:function(jqXHR, textStatus, errorThrown){
-							$('#messageDiv').append('<div class="alert alert-danger" role="alert">Failed : <strong>' + errorThrown + '</strong></div>');
+							var errorFromServer;
+							if(jqXHR.responseText !== ''){
+								errorFromServer = jqXHR.responseText;
+						    } else {
+						    	errorFromServer = errorThrown;
+						    }
+							$('#messageDiv').append('<div class="alert alert-danger" role="alert">Failed : <strong>' + errorFromServer + '</strong></div>');
 						}						
 					});					
 					event.preventDefault();
@@ -94,6 +106,7 @@
 					<ul class="nav navbar-nav">
 						<li><a href="home">DHL Foosball Tournament Home</a></li>
 						<li><a href="signup">Sign In</a></li>
+						<li class="active"><a href="resetpassword">Reset Password</a></li>
 					</ul>
 				</div>            
 			</nav>

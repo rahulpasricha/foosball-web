@@ -10,13 +10,13 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 import com.foosball.web.model.User;
-import com.foosball.web.service.UserService;
+import com.foosball.web.service.EntityService;
 
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
 	@Resource
-	private UserService userService;
+	private EntityService entityService;
 
 	public Authentication authenticate(Authentication authentication)
 			throws AuthenticationException {
@@ -24,7 +24,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		String inputPassword = authentication.getCredentials().toString()
 				.trim();
 
-		User user = userService.getUser(userName);
+		User user = entityService.getUser(userName);
 
 		if (user == null) {
 			throw new BadCredentialsException("User name not found");
