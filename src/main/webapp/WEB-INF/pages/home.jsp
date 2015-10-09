@@ -108,6 +108,18 @@
 												'</strong> Contact the site admins.</div>');
 											}							
 									  });
+									
+										$.ajax({
+											type: 'GET',
+											url: 'getAllfoosballUsers.fd',
+											contentType: 'application/json; charset=utf-8',
+											dataType: 'json',
+											success: function(result) {
+												console.log(result);
+											},error:function(jqXHR, textStatus, errorThrown){
+												console.log(errorThrown);
+											}							
+									  });
 								});
 							</script>
 						</div>
@@ -141,6 +153,32 @@
 								<tr>
 									<td>Team 3</td>
 									<td>Brad / Pitt</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="col-sm-4 col-xs-offset-1">
+					<div class="row">
+						<h2><span class="label label-info">Registered Players</span></h2>
+					</div>
+					<br>
+					<div class="row">
+						<table class="table table-bordered table-striped table-hover">
+							<thead>
+								<tr>
+									<th>Players</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>John Doe</td>
+								</tr>
+								<tr>
+									<td>Tom Cruise</td>
+								</tr>
+								<tr>
+									<td>Brad Pitt</td>
 								</tr>
 							</tbody>
 						</table>
