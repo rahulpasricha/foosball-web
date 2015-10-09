@@ -24,8 +24,7 @@ public class UserController {
 	private UserService userService;
 
 	@RequestMapping(value = "/getAllfoosballUsers.fd", method = RequestMethod.GET)
-	@ResponseBody
-	public List<User> getAllFoosballusers() {
+	public @ResponseBody List<User> getAllFoosballusers() {
 		return userService.getAllFoosballusers();
 	}
 

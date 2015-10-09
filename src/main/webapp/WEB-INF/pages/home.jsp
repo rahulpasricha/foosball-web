@@ -115,9 +115,14 @@
 											contentType: 'application/json; charset=utf-8',
 											dataType: 'json',
 											success: function(result) {
-												console.log(result);
+												var tableHtml = '<table class="table table-bordered table-striped table-hover"><th>Players</th></tr></thead><tbody>';
+												 $.each(result, function (index, value) {
+													 tableHtml += '<tr><td>' + value.firstName + ' ' + value.lastName + '</td>';
+												 });
+												 tableHtml += '</tbody></table>';
+												 $(tableHtml).appendTo($('#listOfPlayers'));
 											},error:function(jqXHR, textStatus, errorThrown){
-												console.log(errorThrown);
+												
 											}							
 									  });
 								});
@@ -163,25 +168,7 @@
 						<h2><span class="label label-info">Registered Players</span></h2>
 					</div>
 					<br>
-					<div class="row">
-						<table class="table table-bordered table-striped table-hover">
-							<thead>
-								<tr>
-									<th>Players</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>John Doe</td>
-								</tr>
-								<tr>
-									<td>Tom Cruise</td>
-								</tr>
-								<tr>
-									<td>Brad Pitt</td>
-								</tr>
-							</tbody>
-						</table>
+					<div class="row" id="listOfPlayers">
 					</div>
 				</div>
 			</div>

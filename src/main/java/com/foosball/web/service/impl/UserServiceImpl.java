@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 			User user = new User();
 			user.setFirstName(entity.getFirstName());
 			user.setLastName(entity.getLastName());
-			user.setUsername(entity.getUsername());
+			users.add(user);
 		}
 		
 		return users;

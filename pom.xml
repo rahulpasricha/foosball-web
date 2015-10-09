@@ -212,6 +212,11 @@
 			<artifactId>modelmapper</artifactId>
 			<version>0.6.2</version>
 		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.10</version>
+		</dependency>
 
 	</dependencies>
 
