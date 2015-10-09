@@ -22,14 +22,7 @@
 	<beans:bean id="myAuthenticationSuccessHandler" class="com.foosball.web.handler.MyAuthenticationSuccessHandler"/>
 
 	<authentication-manager>
-		<authentication-provider>
-			<user-service>
-				<user name="rahul" password="pasricha" authorities="ROLE_USER" />
-				<user name="krunal" password="vyas" authorities="ROLE_USER" />
-				<user name="candy" password="ekangaki" authorities="ROLE_USER" />
-				<user name="admin" password="admin" authorities="ROLE_ADMIN" />
-			</user-service>
-		</authentication-provider>
+		<authentication-provider ref="customAuthenticationProvider" />
 	</authentication-manager>
 
 </beans:beans>

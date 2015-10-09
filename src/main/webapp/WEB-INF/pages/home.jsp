@@ -111,7 +111,7 @@
 									
 										$.ajax({
 											type: 'GET',
-											url: 'getAllfoosballUsers.fd',
+											url: 'getAllFoosballUsers.fd',
 											contentType: 'application/json; charset=utf-8',
 											dataType: 'json',
 											success: function(result) {

@@ -1,11 +1,15 @@
 package com.foosball.web.model;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class User implements Serializable {
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+public class User implements Serializable, UserDetails {
 
 	private static final long serialVersionUID = 1L;
 	@NotNull
@@ -19,6 +23,16 @@ public class User implements Serializable {
 	@Size(max = 40)
 	private String lastName;
 	private Integer level;
+	Collection<? extends GrantedAuthority> authorities;
+
+	public User(String username2, String password2,
+			Collection<? extends GrantedAuthority> authorities2) {
+		
+	}
+
+	public User() {
+		
+	}
 
 	public void setId(Integer id) {
 		this.id = id;
@@ -66,6 +80,34 @@ public class User implements Serializable {
 
 	public void setLevel(Integer level) {
 		this.level = level;
+	}
+
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return authorities;
+	}
+
+	public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+		this.authorities = authorities;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return false;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return false;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return false;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return false;
 	}
 
 }

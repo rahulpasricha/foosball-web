@@ -3,6 +3,7 @@ package com.foosball.web.controller.dao.impl;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -25,6 +26,8 @@ public class UserDaoImpl implements UserDao {
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
+	
+	
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -34,13 +37,27 @@ public class UserDaoImpl implements UserDao {
 	}
 	
 	@Override
-	public UserEntity findById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+	public UserEntity getUser(String userName) {
+		UserEntity user;
+		Query query = getEntityManager().createQuery("SELECT u from UserEntity u where u.username = :username");
+		query.setParameter("username", userName);
+		try {
+			user = (UserEntity) query.getSingleResult();
+		} catch (NoResultException e) {
+			user = null;
+		}
+		return user;
 	}
 
 	@Override
-	public UserEntity save(User entity) {
+	public UserEntity save(UserEntity entity) {
+		getEntityManager().persist(entity);
+		getEntityManager().flush();
+		return entity;
+	}
+	
+	@Override
+	public UserEntity findById(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
 	}

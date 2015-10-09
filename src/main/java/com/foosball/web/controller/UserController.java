@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.foosball.web.model.User;
 import com.foosball.web.service.UserService;
+import com.foosball.web.service.impl.UserAlreadyExistsException;
 
 @Controller
 public class UserController {
@@ -23,23 +24,21 @@ public class UserController {
 	@Resource
 	private UserService userService;
 
-	@RequestMapping(value = "/getAllfoosballUsers.fd", method = RequestMethod.GET)
+	@RequestMapping(value = "/getAllFoosballUsers.fd", method = RequestMethod.GET)
 	public @ResponseBody List<User> getAllFoosballusers() {
 		return userService.getAllFoosballusers();
 	}
 
+	@RequestMapping(value = "/createFoosballUser.fd", method = RequestMethod.POST)
+	public @ResponseBody User create(@RequestBody User user) throws UserAlreadyExistsException {
+		return userService.create(user);
+	}
+	
 	@RequestMapping(value = "/foosballuser/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public User findOne(@PathVariable("id") Integer id) {
 		return userService.findById(id);
-	}
-
-	@RequestMapping(value = "/foosballuser", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public User create(@RequestBody User user) {
-		return userService.create(user);
 	}
 
 	@RequestMapping(value = "/foosballuser/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)

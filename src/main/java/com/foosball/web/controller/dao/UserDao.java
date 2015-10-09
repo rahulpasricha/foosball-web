@@ -9,8 +9,9 @@ public interface UserDao {
 	
 	List<UserEntity> getAllFoosballusers();
 	UserEntity findById(Integer id);
-	UserEntity save(User entity);
+	UserEntity save(UserEntity userEntity);
 	UserEntity update(User entity);
 	UserEntity create(User entity);
 	void delete( Integer id );
+	UserEntity getUser(String userName);
 }

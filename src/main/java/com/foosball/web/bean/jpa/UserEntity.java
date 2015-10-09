@@ -10,18 +10,21 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 //import javax.validation.constraints.* ;
 //import org.hibernate.validator.constraints.* ;
 
 @Entity
 @Table(name = "FOOSBALLUSER", schema = "FOOSBALL")
+@SequenceGenerator(name="FOOSBALLUSER_SEQUENCE_GENERATOR", sequenceName="SQ_FOOSBALLUSER")
 public class UserEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Id
+	@Id @GeneratedValue(generator = "FOOSBALLUSER_SEQUENCE_GENERATOR")
 	@Column(name = "ID", nullable = false)
 	private Integer id;
 	
@@ -39,6 +42,9 @@ public class UserEntity implements Serializable {
 	
 	@Column(name = "LEVEL", nullable = true)
 	private Integer level;
+	
+	@Column(name = "ROLE", length = 40)
+	private String role;
 
 	public UserEntity() {
 		super();
@@ -92,4 +98,12 @@ public class UserEntity implements Serializable {
 		this.level = level;
 	}
 
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+	
 }

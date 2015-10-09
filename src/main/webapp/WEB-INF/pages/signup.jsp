@@ -50,9 +50,53 @@
 			$(document).ready(function() {
 			
 				$('.createuser').hide();
+				$("#username").focus();
 				
-				$('#createUserButton').on('click', function() {
+				$('#createUserButton').on('click', function(e) {
+					e.preventDefault();
+					
 					$('.createuser').show();
+					
+					$('#messageDiv').html('');
+					var username = $("#username").val().trim();
+					var password = $("#password").val().trim();
+					var firstname = $('#firstName').val().trim();
+					var lastname = $('#lastName').val().trim();
+					
+					var errorMessage;
+					if (username == '') {
+						errorMessage = '<div class="alert alert-danger" role="alert"><strong>Please enter a username</strong></div>';
+					} else if (password == '') {
+						errorMessage = '<div class="alert alert-danger" role="alert"><strong>Please enter a password</strong></div>';
+					} else if (firstname == '') {
+						errorMessage = '<div class="alert alert-danger" role="alert"><strong>Please enter your first name</strong></div>';
+					} else if (lastname == '') {
+						errorMessage = '<div class="alert alert-danger" role="alert"><strong>Please enter your last name</strong></div>';
+					}
+					$('#messageDiv').append(errorMessage);
+					
+					if (username && password && firstname && lastname) {
+						var formArray = $('#loginForm').serializeArray();
+						var formJson = '{ "username": "' + username + '", "password": "' + password + '", "firstName": "' + firstname + '", "lastName" : "' + lastname + '" }';
+						$.ajax ({
+							type: 'POST',
+							contentType: 'application/json; charset=utf-8',
+							data: formJson,
+							url: 'createFoosballUser.fd',
+							dataType: 'json',												
+							success: function(result) {
+								$("#username").val('');
+								$("#password").val('');
+								$('#firstName').val('');
+								$('#lastName').val('');
+								$('#messageDiv').append('<div class="alert alert-success" role="alert">User Created Successfully. Please remember your username : <strong>' + result.username + '</strong></div>');
+							},error:function(jqXHR, textStatus, errorThrown){
+								$('#messageDiv').append('<div class="alert alert-danger" role="alert">Failed : <strong>' + errorThrown + '</strong></div>');
+							}			
+						});
+					}	
+					
+					return false;
 				});
 				
 				$('#signInButton').on('click', function() {
@@ -62,49 +106,6 @@
 				$('.createuser').change(function() {
 					$('#messageDiv').html('');
 				});
-				
-				/*$("#loginForm").submit(function( event ) {
-					$('#messageDiv').html('');
-					var username = $( "#username" ).val();
-					var password = $( "#password" ).val();
-					
-					var btn = $(this).find("input[type=submit]:focus");
-					var url;
-					if ('signIn' == btn.attr('name')) {
-						url='../login';
-						alert('Logging in...');
-					} else if ('createUser' == btn.attr('name')) {
-					
-						var firstName = $('#firstName').val();
-						var lastName = $('#lastName').val();
-						
-						if (!firstName || !lastName) {
-							$('#messageDiv').append('<div class="alert alert-danger" role="alert"><strong>Both first and last names are required</strong></div>');
-							return false;
-						}
-						
-						url='../createuser';
-						alert('Creating a new user...');
-					}
-					
-					var formArray = $('#loginForm').serializeArray();
-					var formJson = $.toJSON(formArray);
-					
-					$.ajax ({
-						type: 'POST',
-						contentType: 'application/json; charset=utf-8',
-						data: formJson,
-						url: url,
-						dataType: 'json',												
-						success: function(result) {
-							
-						},error:function(jqXHR, textStatus, errorThrown){
-							$('#messageDiv').append('<div class="alert alert-danger" role="alert">Failed : <strong>' + errorThrown + '</strong></div>');
-						}			
-					});
-					
-					event.preventDefault();
-				});*/
 				
 			});
 		</script>
@@ -151,7 +152,7 @@
 						</div>
 						<div class="row">
 							<div class="col-xs-12 col-md-6"><input id="signInButton" type="submit" name="signIn" value="Sign In" class="btn btn-success btn-block btn-lg"></div>
-							<div class="col-xs-12 col-md-6"><input id="createUserButton" type="submit" name="createUser" value="Create User" class="btn btn-primary btn-block btn-lg"></div>
+							<div class="col-xs-12 col-md-6"><button id="createUserButton" name="createUser" value="Create User" class="btn btn-primary btn-block btn-lg">Create User</button></div>
 						</div>
 						<br>
 						<div class="form-group" id="messageDiv">
