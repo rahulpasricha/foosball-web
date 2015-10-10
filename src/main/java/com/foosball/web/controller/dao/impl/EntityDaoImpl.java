@@ -81,7 +81,7 @@ public class EntityDaoImpl implements EntityDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<TeamBo> getAllTeams() {
-		Query query = getEntityManager().createQuery("SELECT t from TeamBo t");
+		Query query = getEntityManager().createQuery("SELECT t from TeamBo t order by id");
 		return (List<TeamBo>) query.getResultList();
 	}
 	
@@ -92,6 +92,11 @@ public class EntityDaoImpl implements EntityDao {
 		query.setParameter("password", password);
 		int count = query.executeUpdate();		
 		return count;
+	}
+	
+	@Override
+	public String getLatestJsonResultSet() {
+		return getEntityManager().createNativeQuery("").getSingleResult().toString();
 	}
 	
 	@Override

@@ -21,4 +21,5 @@ public interface EntityDao {
 	List<TeamBo> getAllTeams();
 	UserBo getUser(Integer id);
 	List<UserBo> otherUsers(String username);
+	String getLatestJsonResultSet();
 }

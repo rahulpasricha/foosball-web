@@ -164,6 +164,38 @@ public class EntityServiceImpl implements EntityService {
 	}
 	
 	@Override
+	public String getFoosballScores() {
+		StringBuilder strBuilder = new StringBuilder();
+		strBuilder.append(createTeamJsonObject(entityDao.getAllTeams()));
+		strBuilder.append("\"results\":");
+		strBuilder.append(entityDao.getLatestJsonResultSet());
+		return strBuilder.toString();
+	}
+	
+	protected String createTeamJsonObject(List<TeamBo> teams) {
+		StringBuilder strBuilder = new StringBuilder();
+		int index = 1;
+		strBuilder.append("{\"teams\":[");
+		for (TeamBo team : teams) {
+			if (index % 2 == 1) {
+				strBuilder.append("[\"");
+				strBuilder.append(team.getName());
+				strBuilder.append("\",\"");
+			} else {
+				strBuilder.append(team.getName());
+				strBuilder.append("\"]");
+				if (index != teams.size()) {
+					strBuilder.append(",");
+				}
+			}
+			
+			index++;
+		}
+		strBuilder.append("],");
+		return strBuilder.toString();
+	}
+	
+	@Override
 	public User findById(Integer id) {
 		return null;
 	}

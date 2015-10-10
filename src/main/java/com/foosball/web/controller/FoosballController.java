@@ -5,11 +5,15 @@
 
 package com.foosball.web.controller;
 
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.foosball.web.service.EntityService;
 
 /**
  * Returns JSON for foosball tournament bracket.
@@ -18,10 +22,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 public class FoosballController {
+	
+	@Resource
+	private EntityService entityService;
 
     @RequestMapping(value = "/getfoosball.html", method = RequestMethod.GET)
     @ResponseBody
     public String getFoosball() {
+    	
+    	String resultJson = entityService.getFoosballScores();
 
     String json =
         "{\"teams\":[[\"Team 1\",\"Team 2\"],"+

@@ -23,4 +23,5 @@ public interface EntityService {
 	
 	List<Rating> getUsersToRate(String username);
 	boolean updateUserRatings(String username, List<Rating> ratings);
+	String getFoosballScores();
 }
