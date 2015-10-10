@@ -47,6 +47,26 @@ public class EntityDaoImpl implements EntityDao {
 		}
 		return user;
 	}
+	
+	@Override
+	public UserBo getUser(Integer id) {
+		UserBo user;
+		Query query = getEntityManager().createQuery("SELECT u from UserBo u where u.id = :id");
+		query.setParameter("id", id);
+		try {
+			user = (UserBo) query.getSingleResult();
+		} catch (NoResultException e) {
+			user = null;
+		}
+		return user;
+	}
+	
+	@Override
+	public List<UserBo> otherUsers(String username) {
+		Query query = getEntityManager().createQuery("SELECT u from UserBo u where u.username != :username").setParameter("username", username);
+		return (List<UserBo>) query.getResultList();
+	}
+
 
 	@Override
 	public UserBo save(UserBo entity) {
@@ -94,4 +114,5 @@ public class EntityDaoImpl implements EntityDao {
 		// TODO Auto-generated method stub
 		
 	}
+
 }

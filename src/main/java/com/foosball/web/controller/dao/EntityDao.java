@@ -19,4 +19,6 @@ public interface EntityDao {
 	int resetPassword(String username, String password);
 	
 	List<TeamBo> getAllTeams();
+	UserBo getUser(Integer id);
+	List<UserBo> otherUsers(String username);
 }

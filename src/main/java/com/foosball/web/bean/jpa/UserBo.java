@@ -1,12 +1,16 @@
 package com.foosball.web.bean.jpa;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -37,6 +41,40 @@ public class UserBo implements Serializable {
 	
 	@Column(name = "ROLE", length = 40)
 	private String role;
+	
+	@OneToOne
+	@JoinColumn(name = "TEAM_ID")
+	private TeamBo team;
+	
+	@ManyToMany(mappedBy = "ratingUser")
+	private List<UserRatingBo> ratingUsers;
+	
+	@ManyToMany(mappedBy = "ratedUser")
+	private List<UserRatingBo> ratedUsers;
+
+	public List<UserRatingBo> getRatingUsers() {
+		return ratingUsers;
+	}
+
+	public void setRatingUsers(List<UserRatingBo> ratingUsers) {
+		this.ratingUsers = ratingUsers;
+	}
+
+	public List<UserRatingBo> getRatedUsers() {
+		return ratedUsers;
+	}
+
+	public void setRatedUsers(List<UserRatingBo> ratedUsers) {
+		this.ratedUsers = ratedUsers;
+	}
+
+	public TeamBo getTeam() {
+		return team;
+	}
+
+	public void setTeam(TeamBo team) {
+		this.team = team;
+	}
 
 	public UserBo() {
 		super();

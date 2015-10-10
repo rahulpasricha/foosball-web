@@ -3,6 +3,7 @@ package com.foosball.web.service;
 import java.util.List;
 
 import com.foosball.web.exception.FoosballException;
+import com.foosball.web.model.Rating;
 import com.foosball.web.model.Team;
 import com.foosball.web.model.User;
 
@@ -19,4 +20,6 @@ public interface EntityService {
 	boolean resetPassword(User user) throws FoosballException;
 	
 	List<Team> getAllTeams();
+	
+	List<Rating> getUsersToRate(String username);
 }

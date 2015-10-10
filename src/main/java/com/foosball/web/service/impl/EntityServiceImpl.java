@@ -5,14 +5,17 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.foosball.web.bean.jpa.TeamBo;
 import com.foosball.web.bean.jpa.UserBo;
+import com.foosball.web.bean.jpa.UserRatingBo;
 import com.foosball.web.controller.dao.EntityDao;
 import com.foosball.web.exception.FoosballException;
+import com.foosball.web.model.Rating;
 import com.foosball.web.model.Team;
 import com.foosball.web.model.User;
 import com.foosball.web.service.EntityService;
@@ -88,6 +91,38 @@ public class EntityServiceImpl implements EntityService {
 		}
 		
 		return allTeams;
+	}
+	
+	@Override
+	public List<Rating> getUsersToRate(String username) {
+		UserBo user = entityDao.getUser(username);
+		if (ArrayUtils.isEmpty(user.getRatedUsers().toArray())) {
+			return createDefaultRatings(entityDao.otherUsers(username));
+		}
+		return convertRatingBoToVo(user.getRatedUsers());
+	}
+	
+	private List<Rating> convertRatingBoToVo(List<UserRatingBo> ratedUsers) {
+		List<Rating> ratings = new ArrayList();
+		for (UserRatingBo userRating : ratedUsers) {
+			Rating rating = new Rating();
+			rating.setUserId(userRating.getRatedUser().getId());
+			rating.setFoosballPlayerName(String.format("%s %s", userRating.getRatedUser().getFirstName(), userRating.getRatedUser().getLastName()));
+			rating.setRating(userRating.getRating());
+			ratings.add(rating);
+		}
+		return ratings;
+	}
+
+	private List<Rating> createDefaultRatings(List<UserBo> otherUsers) {
+		List<Rating> ratings = new ArrayList();
+		for (UserBo user : otherUsers) {
+			Rating userRating = new Rating();
+			userRating.setUserId(user.getId());
+			userRating.setFoosballPlayerName(String.format("%s %s", user.getFirstName(), user.getLastName()));
+			ratings.add(userRating);
+		}
+		return ratings;
 	}
 	
 	@Override
