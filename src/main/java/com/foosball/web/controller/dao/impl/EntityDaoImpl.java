@@ -61,9 +61,12 @@ public class EntityDaoImpl implements EntityDao {
 		return user;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<UserBo> otherUsers(String username) {
-		Query query = getEntityManager().createQuery("SELECT u from UserBo u where u.username != :username").setParameter("username", username);
+		Query query = getEntityManager().createQuery("SELECT u from UserBo u where u.username != :username and u.role = :role")
+						.setParameter("username", username)
+						.setParameter("role", "ROLE_USER");
 		return (List<UserBo>) query.getResultList();
 	}
 

@@ -183,7 +183,12 @@
 													alert('Failed to perform the action. Reason : ' + errorThrown);
 												}												
 											});
-										}
+										 }
+										
+										 $('#stopRegistrationButton').on('click', function(e) {
+											e.preventDefault(); 
+											 
+										 });
 									});
 								</script>
 							</div>
@@ -194,29 +199,19 @@
 			<div class="row">	
 				<div class="col-sm-4 col-xs-offset-1">
 					<div class="row">
-						<h2><span class="label label-info">Delete User</span></h2>
+						<h2><span class="label label-info">End User Registration</span></h2>
 					</div>
 					<br>
 					<form role="form">
-						<h4><small>Select a user and delete it. Note : The user is permanently removed from the system.</small></h4>
-									<hr>
-						<div class="form-group">
-							<select id="players" name="players" class="form-control input-md">
-								<option value=""></option>	
-								<option value="User 1">User 1</option>
-								<option value="User 2">User 2</option>
-								<option value="User 3">User 3</option>
-								<option value="User 4">User 4</option>
-							</select>
-						</div>
+						<h4><small>Click here to stop more users from registering, this will also make sure the users can't rate their opponents anymore</small></h4>
+						<br>
 						<div class="row">
-							<div class="col-xs-12 col-md-6"><input id="deleteUserButton" type="submit" value="Delete User" class="btn btn-success btn-lg"></div>
+							<div class="col-xs-12 col-md-6"><input id="stopRegistrationButton" type="submit" value="Stop User Registration" class="btn btn-success btn-lg"></div>
 						</div>
 					</form>				
 				</div>
 			</div>
         </div>
-		</div>
 		<hr>
 		<footer class="pull-right">
 			<p style="margin-top: 4px;margin-right:20px;color: lightgrey;font-size:11px">&copy; Development Team</p>

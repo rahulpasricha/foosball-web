@@ -90,6 +90,7 @@
 			    margin-right: 10px;
 			}
         </style>
+        <script>var loggedInUser = '<sec:authentication property="principal.username" />'</script>
     </head>
     <body>
 		<div class="container-fluid">
@@ -106,6 +107,7 @@
 					</div>
 					<div class="collapse navbar-collapse" role="navigation">
 						<ul class="nav navbar-nav pull-right" style="margin-top:4px;">
+							<li><h4 id="welcomeUserTest"></h4></li>
 							<li><h4 id="welcomeUser"><small>Welcome <strong><sec:authentication property="principal.username" /></strong></small></h4></li>
 							<li>&nbsp;&nbsp;&nbsp;</li>
 							<li><a href=<c:url value="j_spring_security_logout" /> class="btn btn-primary btn-sm" id="logout" style="margin-top:7px;">Logout</a></li>
@@ -125,6 +127,7 @@
 							<div id="minimal">
 								<script>
 									$(document).ready(function() {
+										
 										//Handles menu drop down
 										$('.dropdown-menu').find('form').click(function (e) {
 											e.stopPropagation();
@@ -147,6 +150,78 @@
 													'</strong> Contact the site admins.</div>');
 												}							
 										  });
+										
+										$.ajax({
+											type: 'GET',
+											url: 'getRatings/' + loggedInUser,
+											contentType: 'application/json; charset=utf-8',
+											dataType: 'json',
+											success: function(result) {
+												$('#ratingsMessageDiv').html('');
+												var tableHtml = '<input type="text" name="username" value="' + loggedInUser + '" hidden>';
+												tableHtml += '<table name="opponentTable" class="table table-bordered table-striped table-hover table-condensed"><thead><tr><th>Player</th><th>Rating</th></tr></thead><tbody>';
+												 $.each(result, function (index, value) {
+													 var rating = value.rating;
+													 
+													 var comboBoxHtml = '<select name="opponent' + index + '"><option value="3" ' + (rating == 0 ? ' selected="selected">' : '>') + 'UNKNOWN</option>' +
+															 			'<option value="1" ' + (rating == 1 ? ' selected="selected">' : '>') + 'BEGINNER</option>' +
+																	 	'<option value="2" ' + (rating == 2 ? ' selected="selected">' : '>') + 'INTERMEDIATE</option>' +
+																		'<option value="4" ' + (rating == 3 ? ' selected="selected">' : '>') + 'ADVANCED</option>' +
+																		'<option value="5" ' + (rating == 4 ? ' selected="selected">' : '>') + 'EXPERT</option></select>';
+																		
+													 tableHtml += '<tr><td>' + value.foosballPlayerName + '</td><td>' + comboBoxHtml + '</td></tr>';
+												 });
+												 tableHtml += '</tbody></table>';
+												 $(tableHtml).appendTo($('#ratingsDiv'));
+												 
+												 if (result.length == 0) {
+													 $('#ratingsMessageDiv').append('<div class="alert alert-info" role="alert"><strong>No users available to rate.</strong></div>');													 
+												 } else {
+													 $('#ratingsMessageDiv').append('');
+												 }										
+												 
+											},error:function(jqXHR, textStatus, errorThrown){
+												var errorFromServer;
+												if(jqXHR.responseText !== ''){
+													errorFromServer = jqXHR.responseText;
+													if (errorFromServer.indexOf("<html>") >= 0) {
+														errorFromServer = errorThrown;
+													}
+											    } else {
+											    	errorFromServer = errorThrown;
+											    }
+												$('#ratingsMessageDiv').append('<div class="alert alert-danger" role="alert">Failed : <strong>' + errorFromServer + '</strong></div>');
+											}							
+									  	});
+										
+										$('#playerRatingsForm').submit(function(e) {
+											e.preventDefault();
+											
+											var formArray = $('#playerRatingsForm').serializeArray();
+											var formJson = $.toJSON(formArray);
+											
+											$.ajax ({
+												type: 'POST',
+												contentType: 'application/json; charset=utf-8',
+												data: formJson,
+												url: 'updateRatings',
+												dataType: 'json',												
+												success: function(result) {
+													$('#messageDiv').html('');
+													$('#messageDiv').append('<div class="alert alert-info" role="alert"><strong>Ratings Updated Successfully.</strong></div>');
+												},error:function(jqXHR, textStatus, errorThrown){
+													var errorFromServer;
+													if(jqXHR.responseText !== ''){
+														errorFromServer = jqXHR.responseText;
+												    } else {
+												    	errorFromServer = errorThrown;
+												    }
+													$('#messageDiv').append('<div class="alert alert-danger" role="alert">Failed : <strong>' + errorFromServer + '</strong></div>');
+												}						
+											});	
+											
+										});
+										
 									});
 								</script>
 							</div>
@@ -161,74 +236,30 @@
 					</div>
 					<br>
 					<div class="row">
-						<form role="form" id="playerRatingsForm">
+						<form class="form" role="form" id="playerRatingsForm" name="playerRatingsForm">
 							<h4><small>Rate other players based on their skill level. This will be taken into account when the teams are drawn and will make
 							sure the teams are well balanced.</small></h4>
 							<hr>
-							<table class="table table-bordered table-striped table-hover table-condensed">
-								<thead>
-									<tr>
-										<th>Player</th>
-										<th>Rating</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>John Doe</td>
-										<td>
-											<select id="playerRatings" name="playerRatings" class="form-control input-sm">
-												<option value=""></option>
-												<option value="BEGINNER">BEGINNER</option>
-												<option value="INTERMEDIATE">INTERMEDIATE</option>
-												<option value="ADVANCED">ADVANCED</option>
-												<option value="EXPERT">EXPERT</option>
-											</select>
-										</td>
-									</tr>
-									<tr>
-										<td>Mark Firefox</td>
-										<td>
-											<select id="playerRatings" name="playerRatings" class="form-control input-sm">
-												<option value=""></option>
-												<option value="BEGINNER">BEGINNER</option>
-												<option value="INTERMEDIATE">INTERMEDIATE</option>
-												<option value="ADVANCED">ADVANCED</option>
-												<option value="EXPERT">EXPERT</option>
-											</select>
-										</td>
-									</tr>
-									<tr>
-										<td>Bob Chrome</td>
-										<td>
-											<select id="playerRatings" name="playerRatings" class="form-control input-sm">
-												<option value=""></option>	
-												<option value="BEGINNER">BEGINNER</option>
-												<option value="INTERMEDIATE">INTERMEDIATE</option>
-												<option value="ADVANCED">ADVANCED</option>
-												<option value="EXPERT">EXPERT</option>
-											</select>
-										</td>
-									</tr>
-								</tbody>
-							</table>
+							<div class="row" id="ratingsDiv"></div>
 							<div class="row">
 								<div class="col-xs-12 col-md-6"><input id="ratePlayersButton" type="submit" value="Rate Players" class="btn btn-success btn-block btn-lg"></div>
 							</div>
+							<br>
+							<div class="row" id="ratingsMessageDiv"></div>
 						</form>
 					</div>
 				</div>
 				<div class="col-sm-5 col-xs-offset-1">
 					<div class="row">
-						<h2><span class="label label-info">Submit Your Team Name</span></h2>
+						<h2><span class="label label-info">Update Your Team Name</span></h2>
 					</div>
 					<br>
 					<div class="row">
-						<h3><small>Your current team name is &nbsp&nbsp</small><span class="label label-default" id="currentTeamName">TEAM 1</span></h3>
+						<h3><small>Your current team name is &nbsp&nbsp</small><span class="label label-default" id="currentTeamName"></span></h3>
 						<br>
 						<div class="alert alert-info" role="alert">
 						  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-						  Pro-actively updating your team name as soon as possible has an advantage.
-						  When the teams are drawn, the first two teams to register their team names with us will get a bye in the first round.							  
+						  Please consult with your team mate before changing the team name, don't keep your partner out of the loop.							  
 						</div>
 						<hr>
 						<form role="form" id="updateTeamNameForm">
@@ -242,7 +273,6 @@
 							<div class="form-group" id="messageDiv">
 								
 							</div>						
-							<hr>
 						</form>
 					</div>
 				</div>

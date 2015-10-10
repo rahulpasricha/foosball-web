@@ -25,7 +25,7 @@
 		</developer>
 	</developers>
 	<properties>
-		<jdk.version>1.6</jdk.version>
+		<jdk.version>1.7</jdk.version>
 		<spring.version>3.2.8.RELEASE</spring.version>
 		<spring.security.version>3.2.3.RELEASE</spring.security.version>
 		<jstl.version>1.2</jstl.version>
@@ -256,6 +256,41 @@
 					</webApp>
 				</configuration>
 			</plugin>
+			
+			<plugin>
+		      <groupId>org.apache.maven.plugins</groupId>
+		      <artifactId>maven-dependency-plugin</artifactId>
+		      <version>2.3</version>
+		      <executions>
+		        <execution>
+		          <phase>package</phase>
+		          <goals><goal>copy</goal></goals>
+		          <configuration>
+		            <artifactItems>
+		              <artifactItem>
+		                <groupId>org.eclipse.jetty</groupId>
+		                <artifactId>jetty-runner</artifactId>
+		                <version>9.2.13.v20150730</version>
+		                <destFileName>jetty-runner.jar</destFileName>
+		              </artifactItem>
+		            </artifactItems>
+		          </configuration>
+		        </execution>
+		       </executions>
+		    </plugin>
+		    
+		    <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+				  <archive>
+				    <manifest>
+				    	<useDefaultManifestFile>true</useDefaultManifestFile>
+				    </manifest>
+				  </archive>
+				</configuration>
+    		</plugin>
 
 		</plugins>
 	</build>

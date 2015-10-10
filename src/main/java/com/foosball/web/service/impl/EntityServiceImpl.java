@@ -34,6 +34,11 @@ public class EntityServiceImpl implements EntityService {
 		List<UserBo> entities = entityDao.getAllFoosballusers();
 		for (UserBo entity : entities) {
 			User user = new User();
+			
+			if ("admin".equals(entity.getUsername())) {
+				continue;
+			}
+			
 			user.setFirstName(entity.getFirstName());
 			user.setLastName(entity.getLastName());
 			users.add(user);
