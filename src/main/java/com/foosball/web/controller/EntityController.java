@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.foosball.web.exception.FoosballException;
 import com.foosball.web.model.Rating;
 import com.foosball.web.model.Team;
+import com.foosball.web.model.UpdatedRates;
 import com.foosball.web.model.User;
 import com.foosball.web.service.EntityService;
 
@@ -58,7 +59,11 @@ public class EntityController {
 	@RequestMapping(value = "/getRatings/{username}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody List<Rating> getUserRatings(@PathVariable("username") String username) {
 		return entityService.getUsersToRate(username);
-		
+	}
+	
+	@RequestMapping(value = "/updateRatings", method = RequestMethod.POST)
+	public @ResponseBody boolean updateUserRatings(@RequestBody UpdatedRates updatedRates, HttpServletResponse response) {
+		return entityService.updateUserRatings(updatedRates.getUsername(), updatedRates.getRatings());
 	}
 	
 	@RequestMapping(value = "/resetPassword.fd", method = RequestMethod.POST)

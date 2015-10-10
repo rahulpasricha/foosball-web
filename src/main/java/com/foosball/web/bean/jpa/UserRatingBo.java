@@ -52,7 +52,44 @@ public class UserRatingBo {
 	public void setRating(Integer rating) {
 		this.rating = rating;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "UserRatingBo [id=" + id + ", ratingUser=" + ratingUser + ", ratedUser=" + ratedUser + ", rating="
+				+ rating + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((ratedUser == null) ? 0 : ratedUser.hashCode());
+		result = prime * result + ((ratingUser == null) ? 0 : ratingUser.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UserRatingBo other = (UserRatingBo) obj;
+		if (ratedUser == null) {
+			if (other.ratedUser != null)
+				return false;
+		} else if (!ratedUser.equals(other.ratedUser))
+			return false;
+		if (ratingUser == null) {
+			if (other.ratingUser != null)
+				return false;
+		} else if (!ratingUser.equals(other.ratingUser))
+			return false;
+		return true;
+	}
+
+		
 
 }

@@ -22,4 +22,5 @@ public interface EntityService {
 	List<Team> getAllTeams();
 	
 	List<Rating> getUsersToRate(String username);
+	boolean updateUserRatings(String username, List<Rating> ratings);
 }

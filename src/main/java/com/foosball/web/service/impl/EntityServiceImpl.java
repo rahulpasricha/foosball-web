@@ -102,6 +102,29 @@ public class EntityServiceImpl implements EntityService {
 		return convertRatingBoToVo(user.getRatedUsers());
 	}
 	
+	@Override
+	public boolean updateUserRatings(String username, List<Rating> ratings) {
+		UserBo ratingUserBo = entityDao.getUser(username);
+		if (ratingUserBo == null) {
+			return false;
+		}
+		for (Rating rating : ratings) {
+			UserBo ratedUserBo = entityDao.getUser(rating.getUserId());
+			UserRatingBo userRating = new UserRatingBo();
+			userRating.setRatedUser(ratedUserBo);
+			userRating.setRatingUser(ratingUserBo);
+			if (ratingUserBo.getRatedUsers().contains(userRating)) {
+				int ratedIndex = ratingUserBo.getRatedUsers().indexOf(userRating);
+				userRating = ratingUserBo.getRatedUsers().get(ratedIndex);
+			} else {
+				ratingUserBo.getRatedUsers().add(userRating);
+			}
+			userRating.setRating(rating.getRating());
+		}
+		entityDao.save(ratingUserBo);
+		return true;
+	}
+	
 	private List<Rating> convertRatingBoToVo(List<UserRatingBo> ratedUsers) {
 		List<Rating> ratings = new ArrayList();
 		for (UserRatingBo userRating : ratedUsers) {
