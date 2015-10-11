@@ -4,6 +4,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
+        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		<meta content="utf-8" http-equiv="encoding">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
         <title>DHL Foosball Tournament</title>
         <script type="text/javascript" src="resources/jquery-1.10.2.js"></script>		
         <script type="text/javascript" src="resources/jquery-ui-1.8.16.custom.min.js"></script>
@@ -16,6 +23,13 @@
         <link rel="stylesheet" type="text/css" href="resources/jquery-bracket-master/dist/jquery.bracket.min.css" />
         <link rel="icon" href="<c:url value="resources/favicon.ico"/>" type="image/x-icon" />
 		<link rel="shortcut icon" href="<c:url value="resources/favicon.ico"/>" type="image/x-icon" />
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!--[if lt IE 9]>
+		  <script type='text/javascript' src="resources/respondjs/html5shiv.min.js"></script>
+		  <script type='text/javascript' src="resources/respondjs/respond.min.js"></script>
+		<![endif]-->
+		
+		<link rel='stylesheet' type='text/css' href='resources/respondjs/normalize.css' />
         <style type="text/css">
             div.jQBracket .team div.label {font-family: Arial;font-size: 10px;font-weight: bold;color:black;margin-top: 4px;margin-left: 6px;}
             div.jQBracket .team {width: 110px;}
@@ -205,7 +219,6 @@
 													success: function(result) {
 														$('#registrationMessageDiv').append('<div class="alert alert-info" role="alert"><strong>Updated!!!</strong></div>');
 													},error:function(jqXHR, textStatus, errorThrown) {
-														console.log(errorThrown);
 													}											
 												});
 										 });
@@ -221,7 +234,6 @@
 													success: function(result) {
 														$('#ratingsMessageDiv').append('<div class="alert alert-info" role="alert"><strong>Updated!!!</strong></div>');
 													},error:function(jqXHR, textStatus, errorThrown) {
-														console.log(errorThrown);
 													}											
 												});
 										 });
@@ -237,7 +249,6 @@
 													success: function(result) {
 														$('#teamMessageDiv').append('<div class="alert alert-info" role="alert"><strong>Updated!!!</strong></div>');
 													},error:function(jqXHR, textStatus, errorThrown) {
-														console.log(errorThrown);
 													}											
 												});
 										 });
