@@ -134,6 +134,21 @@
 										});
 										
 										$.ajax({
+											type: 'GET',
+											url: 'getFlagToAllowRatingUpdate',
+											success: function(result) {
+												$("#ratePlayersButton").prop("disabled", ("TRUE" == result) ? false : true);
+											}
+										});
+										$.ajax({
+											type: 'GET',
+											url: 'getFlagToAllowTeamNameUpdate',
+											success: function(result) {
+												$("#updateTeamNameButton").prop("disabled", ("TRUE" == result) ? false : true);
+											}							
+									  	});
+										
+										$.ajax({
 												type: 'GET',
 												url: 'getfoosball.html',
 												contentType: 'application/json; charset=utf-8',
@@ -151,24 +166,24 @@
 												}							
 										  });
 										
+										var resultsFromServer;
+										
 										$.ajax({
 											type: 'GET',
 											url: 'getRatings/' + loggedInUser,
 											contentType: 'application/json; charset=utf-8',
 											dataType: 'json',
 											success: function(result) {
+												resultsFromServer = result;
 												$('#ratingsMessageDiv').html('');
-												var tableHtml = '<input type="text" name="username" value="' + loggedInUser + '" hidden>';
-												tableHtml += '<table name="opponentTable" class="table table-bordered table-striped table-hover table-condensed"><thead><tr><th>Player</th><th>Rating</th></tr></thead><tbody>';
+												var tableHtml = '<table name="opponentTable" class="table table-bordered table-striped table-hover table-condensed"><thead><tr><th>Player</th><th>Rating</th></tr></thead><tbody>';
 												 $.each(result, function (index, value) {
 													 var rating = value.rating;
-													 
-													 var comboBoxHtml = '<select name="opponent' + index + '"><option value="3" ' + (rating == 0 ? ' selected="selected">' : '>') + 'UNKNOWN</option>' +
+													 var comboBoxHtml = '<select class="opponent" name="opponent' + index + '"><option value="3" ' + (rating == 0 ? ' selected="selected">' : '>') + 'UNKNOWN</option>' +
 															 			'<option value="1" ' + (rating == 1 ? ' selected="selected">' : '>') + 'BEGINNER</option>' +
 																	 	'<option value="2" ' + (rating == 2 ? ' selected="selected">' : '>') + 'INTERMEDIATE</option>' +
 																		'<option value="4" ' + (rating == 3 ? ' selected="selected">' : '>') + 'ADVANCED</option>' +
 																		'<option value="5" ' + (rating == 4 ? ' selected="selected">' : '>') + 'EXPERT</option></select>';
-																		
 													 tableHtml += '<tr><td>' + value.foosballPlayerName + '</td><td>' + comboBoxHtml + '</td></tr>';
 												 });
 												 tableHtml += '</tbody></table>';
@@ -179,7 +194,6 @@
 												 } else {
 													 $('#ratingsMessageDiv').append('');
 												 }										
-												 
 											},error:function(jqXHR, textStatus, errorThrown){
 												var errorFromServer;
 												if(jqXHR.responseText !== ''){
@@ -196,10 +210,10 @@
 										
 										$('#playerRatingsForm').submit(function(e) {
 											e.preventDefault();
-											
-											var formArray = $('#playerRatingsForm').serializeArray();
-											var formJson = $.toJSON(formArray);
-											
+											$('.opponent').each(function (index, value) {
+												resultsFromServer[index].rating = $(this).val();												
+											});
+											var formJson = JSON.stringify({"username" : loggedInUser, "ratings" : resultsFromServer});
 											$.ajax ({
 												type: 'POST',
 												contentType: 'application/json; charset=utf-8',
@@ -207,8 +221,8 @@
 												url: 'updateRatings',
 												dataType: 'json',												
 												success: function(result) {
-													$('#messageDiv').html('');
-													$('#messageDiv').append('<div class="alert alert-info" role="alert"><strong>Ratings Updated Successfully.</strong></div>');
+													$('#ratingsMessageDiv').html('');
+													$('#ratingsMessageDiv').append('<div class="alert alert-info" role="alert"><strong>Ratings Updated Successfully.</strong></div>');
 												},error:function(jqXHR, textStatus, errorThrown){
 													var errorFromServer;
 													if(jqXHR.responseText !== ''){
@@ -216,11 +230,28 @@
 												    } else {
 												    	errorFromServer = errorThrown;
 												    }
-													$('#messageDiv').append('<div class="alert alert-danger" role="alert">Failed : <strong>' + errorFromServer + '</strong></div>');
+													$('#ratingsMessageDiv').append('<div class="alert alert-danger" role="alert">Failed : <strong>' + errorFromServer + '</strong></div>');
 												}						
 											});	
 											
 										});
+										
+										$.fn.serializeObject = function()
+										{
+										    var o = {};
+										    var a = this.serializeArray();
+										    $.each(a, function() {
+										        if (o[this.name] !== undefined) {
+										            if (!o[this.name].push) {
+										                o[this.name] = [o[this.name]];
+										            }
+										            o[this.name].push(this.value || '');
+										        } else {
+										            o[this.name] = this.value || '';
+										        }
+										    });
+										    return o;
+										};
 										
 									});
 								</script>
@@ -239,6 +270,8 @@
 						<form class="form" role="form" id="playerRatingsForm" name="playerRatingsForm">
 							<h4><small>Rate other players based on their skill level. This will be taken into account when the teams are drawn and will make
 							sure the teams are well balanced.</small></h4>
+							<h4><small>If the Rate Players button is disabled, don't worry,it means that all the players haven't finished registration. Once every one has
+							registered, you can start rating your opponents.</small></h4>
 							<hr>
 							<div class="row" id="ratingsDiv"></div>
 							<div class="row">

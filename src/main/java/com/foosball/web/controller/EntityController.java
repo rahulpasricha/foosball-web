@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -80,6 +82,28 @@ public class EntityController {
 			}
 		}
 		return true;
+	}
+	
+	@RequestMapping(value = "/getFlagToAllowRatingUpdate", method = RequestMethod.GET)
+	public @ResponseBody String getFlagToAllowRatingUpdate() {
+		return entityService.getFlagToAllowRatingUpdate();
+	}
+	
+	@RequestMapping(value = "/getFlagToAllowTeamNameUpdate", method = RequestMethod.GET)
+	public @ResponseBody String getFlagToAllowTeamNameUpdate() {
+		return entityService.getFlagToAllowTeamNameUpdate();
+	}
+	
+	@RequestMapping(value = "/getFlagToAllowCreateUser", method=RequestMethod.GET)
+	public @ResponseBody String getFlagToAllowCreateUser() {
+		return entityService.getFlagToAllowCreateUser();
+	}
+	
+	@PreAuthorize("isAuthenticated()")
+	@RequestMapping(value = "/updateflag/{flag}/{value}", method = RequestMethod.POST)
+	public @ResponseBody String updateFlag(@PathVariable("flag") String flag, @PathVariable("value") String value) {
+		Integer count = entityService.updateFlag(flag, value);
+		return count.toString();
 	}
 	
 	@RequestMapping(value = "/foosballuser/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

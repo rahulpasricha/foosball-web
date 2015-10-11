@@ -48,6 +48,14 @@
         </style>
 		<script type="text/javascript">
 			$(document).ready(function() {
+				
+				$.ajax({
+					type: 'GET',
+					url: 'getFlagToAllowCreateUser',
+					success: function(result) {
+						$("#createUserButton").prop("disabled", ("TRUE" == result) ? false : true);
+					}
+				});
 			
 				$('.createuser').hide();
 				$("#username").focus();
@@ -98,6 +106,9 @@
 								var errorFromServer;
 								if(jqXHR.responseText !== ''){
 									errorFromServer = jqXHR.responseText;
+									if (errorFromServer.indexOf("<html>") >= 0) {
+										errorFromServer = errorThrown;
+									}
 							    } else {
 							    	errorFromServer = errorThrown;
 							    }

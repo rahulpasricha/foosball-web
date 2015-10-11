@@ -24,4 +24,12 @@ public interface EntityService {
 	List<Rating> getUsersToRate(String username);
 	boolean updateUserRatings(String username, List<Rating> ratings);
 	String getFoosballScores();
+	
+	String getJsonResultSet();
+	String updateJsonResultSet(String json);
+	
+	String getFlagToAllowRatingUpdate();
+	String getFlagToAllowTeamNameUpdate();
+	String getFlagToAllowCreateUser();
+	int updateFlag(String flag, String value);
 }

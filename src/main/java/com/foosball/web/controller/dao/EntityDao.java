@@ -22,4 +22,12 @@ public interface EntityDao {
 	UserBo getUser(Integer id);
 	List<UserBo> otherUsers(String username);
 	String getLatestJsonResultSet();
+	
+	String getJsonResultSet();
+	String updateJsonResultSet(String json);
+	
+	String getFlagToAllowRatingUpdate();
+	String getFlagToAllowTeamNameUpdate();
+	String getFlagToAllowCreateUser();
+	int updateFlag(String flag, String value);
 }

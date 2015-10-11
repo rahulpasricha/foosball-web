@@ -87,7 +87,14 @@
 			    font-size: 20px;
 			    margin-right: 10px;
 			}
+			.col-sm-3 {
+			    margin-right: 50px;
+			}
+			form {
+			    margin-left: -15px;
+			}
         </style>
+        <script>var loggedInUser = '<sec:authentication property="principal.username" />'</script>
     </head>
     <body>
 		<div class="container-fluid">
@@ -132,6 +139,7 @@
 							<div id="minimal">
 								<script>
 									$(document).ready(function() {
+										
 										//Handles menu drop down
 										$('.dropdown-menu').find('form').click(function (e) {
 											e.stopPropagation();
@@ -149,10 +157,12 @@
 												container.bracket({
 													init: result,
 													save: saveFn,
-													userData: '../postfoosball/'
+													userData: 'postfoosball.html'
 												});
 											},error:function(jqXHR, textStatus, errorThrown){
-												alert('Failed to the load tournament bracket.Contact the site admins. Reason : ' + errorThrown);
+												$('#minimal').append('<div class="alert alert-danger" role="alert" style="width:470px;">' +
+														'<Strong>Failed to the load tournament bracket.' +
+														'</strong> Contact the site admins.</div>');
 											}								
 										});
 										
@@ -175,20 +185,63 @@
 													container.bracket({
 														init: result,
 														save: saveFn,
-														userData: '../postfoosball/'
+														userData: 'postfoosball.html'
 													});
 													$('#updateProgressBar').hide();
 												} ,error:function(jqXHR, textStatus, errorThrown){
 													$('#updateProgressBar').hide();
-													alert('Failed to perform the action. Reason : ' + errorThrown);
 												}												
 											});
 										 }
 										
-										 $('#stopRegistrationButton').on('click', function(e) {
-											e.preventDefault(); 
-											 
+										 $('#startRegistrationButton, #stopRegistrationButton').on('click', function(e) {
+											 $('#registrationMessageDiv').html('');
+											 e.preventDefault(); 
+											 $.ajax({
+													type: 'POST',
+													url: 'updateflag/ALLOW_CREATE_USER/' + e.target.name,
+													contentType: 'application/json; charset=utf-8',
+													dataType: 'json',
+													success: function(result) {
+														$('#registrationMessageDiv').append('<div class="alert alert-info" role="alert"><strong>Updated!!!</strong></div>');
+													},error:function(jqXHR, textStatus, errorThrown) {
+														console.log(errorThrown);
+													}											
+												});
 										 });
+										 
+										 $('#startPlayerRatingButton, #stopPlayerRatingButton').on('click', function(e) {
+											 $('#ratingsMessageDiv').html('');
+											 e.preventDefault(); 
+											 $.ajax({
+													type: 'POST',
+													url: 'updateflag/ALLOW_RATINGS_UPDATE/' + e.target.name,
+													contentType: 'application/json; charset=utf-8',
+													dataType: 'json',
+													success: function(result) {
+														$('#ratingsMessageDiv').append('<div class="alert alert-info" role="alert"><strong>Updated!!!</strong></div>');
+													},error:function(jqXHR, textStatus, errorThrown) {
+														console.log(errorThrown);
+													}											
+												});
+										 });
+										 
+										 $('#startTeamNameUpdatesButton, #stopTeamNameUpdatesButton').on('click', function(e) {
+											 $('#teamMessageDiv').html('');
+											 e.preventDefault(); 
+											 $.ajax({
+													type: 'POST',
+													url: 'updateflag/ALLOW_TEAM_UPDATE/' + e.target.name,
+													contentType: 'application/json; charset=utf-8',
+													dataType: 'json',
+													success: function(result) {
+														$('#teamMessageDiv').append('<div class="alert alert-info" role="alert"><strong>Updated!!!</strong></div>');
+													},error:function(jqXHR, textStatus, errorThrown) {
+														console.log(errorThrown);
+													}											
+												});
+										 });
+										 
 									});
 								</script>
 							</div>
@@ -197,18 +250,59 @@
 			</div>
 			<hr>
 			<div class="row">	
-				<div class="col-sm-4 col-xs-offset-1">
+				<div class="col-sm-3 col-xs-offset-1">
 					<div class="row">
-						<h2><span class="label label-info">End User Registration</span></h2>
+						<h2><span class="label label-info">User Registration</span></h2>
 					</div>
 					<br>
 					<form role="form">
-						<h4><small>Click here to stop more users from registering, this will also make sure the users can't rate their opponents anymore</small></h4>
+						<h4><small>Use this section to start/stop new user registration. (enables/disables 'Create User button' on the sign up screen)</small></h4>
 						<br>
 						<div class="row">
-							<div class="col-xs-12 col-md-6"><input id="stopRegistrationButton" type="submit" value="Stop User Registration" class="btn btn-success btn-lg"></div>
+							<div class="col-xs-12 col-md-6"><input id="startRegistrationButton" type="submit" name="TRUE" value="Start" class="btn btn-success btn-lg btn-block"></div>
+							<div class="col-xs-12 col-md-6"><input id="stopRegistrationButton" type="submit" name="FALSE" value="Stop" class="btn btn-success btn-lg btn-block"></div>
 						</div>
-					</form>				
+					</form>	
+					<br>
+					<div class="row" id="registrationMessageDiv">
+						
+					</div>				
+				</div>
+				<div class="col-sm-3">
+					<div class="row">
+						<h2><span class="label label-info">Rating other players</span></h2>
+					</div>
+					<br>
+					<form role="form">
+						<h4><small>Use this section to start/stop player ratings (enables/disables 'Rate Players' button on the user screen)</small></h4>
+						<br>
+						<div class="row">
+							<div class="col-xs-12 col-md-6"><input id="startPlayerRatingButton" type="submit" name="TRUE" value="Start" class="btn btn-success btn-lg btn-block"></div>
+							<div class="col-xs-12 col-md-6"><input id="stopPlayerRatingButton" type="submit" name="FALSE" value="Stop" class="btn btn-success btn-lg btn-block"></div>
+						</div>
+					</form>
+					<br>
+					<div class="row" id="ratingsMessageDiv">
+						
+					</div>		
+				</div>
+				<div class="col-sm-3">
+					<div class="row">
+						<h2><span class="label label-info">Team name update</span></h2>
+					</div>
+					<br>
+					<form role="form">
+						<h4><small>Use this section to start/stop team name updates (enables/disables 'Update Team Name' button on the user screen)</small></h4>
+						<br>
+						<div class="row">
+							<div class="col-xs-12 col-md-6"><input id="startTeamNameUpdatesButton" type="submit" name="TRUE" value="Start" class="btn btn-success btn-lg btn-block"></div>
+							<div class="col-xs-12 col-md-6"><input id="stopTeamNameUpdatesButton" type="submit" name="FALSE" value="Stop" class="btn btn-success btn-lg btn-block"></div>
+						</div>
+					</form>
+					<br>
+					<div class="row" id="teamMessageDiv">
+						
+					</div>				
 				</div>
 			</div>
         </div>

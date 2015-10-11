@@ -19,6 +19,7 @@ import com.foosball.web.model.Rating;
 import com.foosball.web.model.Team;
 import com.foosball.web.model.User;
 import com.foosball.web.service.EntityService;
+import com.foosball.web.util.EncryptionUtil;
 
 @Service("entityService")
 @Transactional
@@ -75,7 +76,14 @@ public class EntityServiceImpl implements EntityService {
 		
 		userEntity = new UserBo();
 		userEntity.setUsername(user.getUsername());
-		userEntity.setPassword(user.getPassword());
+		
+		String encryptedPassword = null;
+		try {
+			encryptedPassword = EncryptionUtil.encrypt(user.getPassword());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		userEntity.setPassword(encryptedPassword);
 		userEntity.setFirstName(user.getFirstName());
 		userEntity.setLastName(user.getLastName());
 		userEntity.setRole("ROLE_USER");
@@ -92,7 +100,9 @@ public class EntityServiceImpl implements EntityService {
 		
 		List<Team> allTeams = new ArrayList<Team>();
 		for (TeamBo eachTeam : teams) {
-			allTeams.add(new Team(eachTeam.getName()));
+			if (eachTeam.getName() != null) {
+				allTeams.add(new Team(eachTeam.getName()));
+			}
 		}
 		
 		return allTeams;
@@ -155,7 +165,12 @@ public class EntityServiceImpl implements EntityService {
 	
 	@Override
 	public boolean resetPassword(User user) throws FoosballException {
-		int count = entityDao.resetPassword(user.getUsername(), user.getPassword());
+		int count = 0;
+		try {
+			count = entityDao.resetPassword(user.getUsername(), EncryptionUtil.encrypt(user.getPassword()));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		if (count == 0) {
 			throw new FoosballException("Reset password failed. Entered username doesn't exists.");
@@ -193,6 +208,37 @@ public class EntityServiceImpl implements EntityService {
 		}
 		strBuilder.append("],");
 		return strBuilder.toString();
+	}
+	
+	@Override
+	public String getJsonResultSet() {
+		return entityDao.getJsonResultSet();
+	}
+	
+	@Override
+	public String updateJsonResultSet(String json) {
+		return entityDao.updateJsonResultSet(json);
+	}
+	
+	@Override
+	public String getFlagToAllowRatingUpdate() {
+		return entityDao.getFlagToAllowRatingUpdate();
+	}
+
+	@Override
+	public String getFlagToAllowTeamNameUpdate() {
+		return entityDao.getFlagToAllowTeamNameUpdate();
+	}
+	
+	@Override
+	public String getFlagToAllowCreateUser() {
+		return entityDao.getFlagToAllowCreateUser();
+	}
+	
+	@Override
+	public int updateFlag(String flag, String value) {
+		return entityDao.updateFlag(flag, value);
+		
 	}
 	
 	@Override

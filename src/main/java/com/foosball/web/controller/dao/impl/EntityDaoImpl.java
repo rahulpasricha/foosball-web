@@ -1,5 +1,6 @@
 package com.foosball.web.controller.dao.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -97,6 +98,41 @@ public class EntityDaoImpl implements EntityDao {
 	@Override
 	public String getLatestJsonResultSet() {
 		return getEntityManager().createNativeQuery("").getSingleResult().toString();
+	}
+	
+	@Override
+	public String getJsonResultSet() {
+		return (String) getEntityManager().createNativeQuery("SELECT JSONRESULTSTRING FROM FOOSBALL.JSON_RESULTSET").getSingleResult();
+	}
+
+	@Override
+	public String updateJsonResultSet(String json) {
+		getEntityManager().createNativeQuery("UPDATE FOOSBALL.JSON_RESULTSET SET JSONRESULTSTRING = :json, CREATEDON = :today")
+			.setParameter("json", json).setParameter("today", new Date()).executeUpdate();
+		
+		return getJsonResultSet();
+	}
+
+	@Override
+	public String getFlagToAllowRatingUpdate() {
+		return (String) getEntityManager().createNativeQuery("SELECT VALUE FROM FOOSBALL.APPCONFIG WHERE NAME = 'ALLOW_RATINGS_UPDATE'").getSingleResult();
+	}
+
+	@Override
+	public String getFlagToAllowTeamNameUpdate() {
+		return (String) getEntityManager().createNativeQuery("SELECT VALUE FROM FOOSBALL.APPCONFIG WHERE NAME = 'ALLOW_TEAM_UPDATE'").getSingleResult();
+	}
+	
+	@Override
+	public String getFlagToAllowCreateUser() {
+		return (String) getEntityManager().createNativeQuery("SELECT VALUE FROM FOOSBALL.APPCONFIG WHERE NAME = 'ALLOW_CREATE_USER'").getSingleResult();
+	}
+	
+	@Override
+	public int updateFlag(String flag, String value) {
+		return getEntityManager().createNativeQuery("UPDATE FOOSBALL.APPCONFIG SET VALUE = :value WHERE NAME = :name")
+			.setParameter("value", value)
+			.setParameter("name", flag).executeUpdate();
 	}
 	
 	@Override

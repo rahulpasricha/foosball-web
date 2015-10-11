@@ -130,6 +130,9 @@
 												var errorFromServer;
 												if(jqXHR.responseText !== ''){
 													errorFromServer = jqXHR.responseText;
+													if (errorFromServer.indexOf("<html>") >= 0) {
+														errorFromServer = errorThrown;
+													}
 											    } else {
 											    	errorFromServer = errorThrown;
 											    }
@@ -158,6 +161,9 @@
 												var errorFromServer;
 												if(jqXHR.responseText !== ''){
 													errorFromServer = jqXHR.responseText;
+													if (errorFromServer.indexOf("<html>") >= 0) {
+														errorFromServer = errorThrown;
+													}
 											    } else {
 											    	errorFromServer = errorThrown;
 											    }
