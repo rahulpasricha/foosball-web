@@ -32,4 +32,6 @@ public interface EntityService {
 	String getFlagToAllowTeamNameUpdate();
 	String getFlagToAllowCreateUser();
 	int updateFlag(String flag, String value);
+	
+	Integer buildTeam();
 }

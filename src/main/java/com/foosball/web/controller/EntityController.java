@@ -106,6 +106,13 @@ public class EntityController {
 		return count.toString();
 	}
 	
+	@PreAuthorize("isAuthenticated()")
+	@RequestMapping(value = "/updateflag/{flag}/{value}", method = RequestMethod.POST)
+	public @ResponseBody String buildTeam() {
+		Integer count = entityService.buildTeam();
+		return count.toString();
+	}
+	
 	@RequestMapping(value = "/foosballuser/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody

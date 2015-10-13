@@ -264,4 +264,10 @@ public class EntityServiceImpl implements EntityService {
 		
 	}
 
+	@Override
+	public Integer buildTeam() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
