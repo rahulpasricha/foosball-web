@@ -161,7 +161,7 @@
                 <div class="collapse navbar-collapse" role="navigation">
 					<ul class="nav navbar-nav">
 						<li><a href="home">DHL Foosball Tournament Home</a></li>
-						<li class="active"><a href="${contextPath}/signup">Sign In</a></li>
+						<li class="active"><a href="signup">Sign In</a></li>
 						<li><a href="resetpassword">Reset Password</a></li>
 					</ul>
 				</div>            

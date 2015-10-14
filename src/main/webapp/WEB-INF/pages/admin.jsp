@@ -219,6 +219,7 @@
 													success: function(result) {
 														$('#registrationMessageDiv').append('<div class="alert alert-info" role="alert"><strong>Updated!!!</strong></div>');
 													},error:function(jqXHR, textStatus, errorThrown) {
+														$('#registrationMessageDiv').append('<div class="alert alert-danger" role="alert"><strong>Error : ' + errorThrown + ' </strong></div>');
 													}											
 												});
 										 });
@@ -234,6 +235,7 @@
 													success: function(result) {
 														$('#ratingsMessageDiv').append('<div class="alert alert-info" role="alert"><strong>Updated!!!</strong></div>');
 													},error:function(jqXHR, textStatus, errorThrown) {
+														$('#ratingsMessageDiv').append('<div class="alert alert-danger" role="alert"><strong>Error : ' + errorThrown + ' </strong></div>');
 													}											
 												});
 										 });
@@ -249,6 +251,26 @@
 													success: function(result) {
 														$('#teamMessageDiv').append('<div class="alert alert-info" role="alert"><strong>Updated!!!</strong></div>');
 													},error:function(jqXHR, textStatus, errorThrown) {
+														$('#teamMessageDiv').append('<div class="alert alert-danger" role="alert"><strong>Error : ' + errorThrown + ' </strong></div>');
+													}											
+												});
+										 });
+										 
+										 $('#buildTeamButton').on('click', function(e) {
+											 e.preventDefault(); 
+											 $('#buildTeamMessageDiv').html('');
+											 var $btn = $(this).button('loading');
+											 $.ajax({
+													type: 'POST',
+													url: 'buildteam',
+													contentType: 'application/json; charset=utf-8',
+													dataType: 'json',
+													success: function(result) {
+														$btn.button('reset');
+														$('#buildTeamMessageDiv').append('<div class="alert alert-info" role="alert"><strong>Updated!!!</strong></div>');
+													},error:function(jqXHR, textStatus, errorThrown) {
+														$btn.button('reset');
+														$('#buildTeamMessageDiv').append('<div class="alert alert-danger" role="alert"><strong>Error : ' + errorThrown + ' </strong></div>');
 													}											
 												});
 										 });
@@ -314,6 +336,26 @@
 					<div class="row" id="teamMessageDiv">
 						
 					</div>				
+				</div>
+			</div>
+			<hr>
+			<div class="row">	
+				<div class="col-sm-3 col-xs-offset-1">
+					<div class="row">
+						<h2><span class="label label-info">Build Teams</span></h2>
+					</div>
+					<br>
+					<form role="form">
+						<h4><small>Use this section to trigger team selection</small></h4>
+						<br>
+						<div class="row">
+							<div class="col-xs-12 col-md-6"><button id="buildTeamButton" type="submit" class="btn btn-success btn-lg btn-block" data-loading-text="Building Teams...  ">Draw Teams</button></div>
+						</div>
+					</form>
+					<br>
+					<div class="row" id="buildTeamMessageDiv">
+						
+					</div>
 				</div>
 			</div>
         </div>

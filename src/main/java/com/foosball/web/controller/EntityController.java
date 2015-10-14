@@ -107,7 +107,7 @@ public class EntityController {
 	}
 	
 	@PreAuthorize("isAuthenticated()")
-	@RequestMapping(value = "/updateflag/{flag}/{value}", method = RequestMethod.POST)
+	@RequestMapping(value = "/buildteam", method = RequestMethod.POST)
 	public @ResponseBody String buildTeam() {
 		Integer count = entityService.buildTeam();
 		return count.toString();
