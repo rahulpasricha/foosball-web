@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import com.foosball.web.bean.jpa.TeamBo;
 import com.foosball.web.bean.jpa.UserBo;
+import com.foosball.web.bean.jpa.UserRatingBo;
 import com.foosball.web.controller.dao.EntityDao;
 import com.foosball.web.model.User;
 
@@ -78,6 +79,32 @@ public class EntityDaoImpl implements EntityDao {
 		getEntityManager().flush();
 		return entity;
 	}
+	
+	@Override
+	public void save(UserRatingBo userRatings) {
+		getEntityManager().persist(userRatings);
+		getEntityManager().flush();
+	}
+	
+	@Override
+	public UserRatingBo getUserRating(int ratedUserId, int ratingUserId) {
+		UserRatingBo userRating;
+		Query query = getEntityManager().createQuery("from UserRatingBo u where u.ratedUser.id =:ratedUserId and u.ratingUser.id =:ratingUserId");
+		query.setParameter("ratedUserId", ratedUserId).setParameter("ratingUserId", ratingUserId);
+		try {
+			userRating = (UserRatingBo) query.getSingleResult();
+		} catch (NoResultException e) {
+			userRating = null;
+		}
+		return userRating;
+	}
+	
+	@Override
+	public List<UserRatingBo> getUserRatings(String username) {
+		Query query = getEntityManager().createQuery("from UserRatingBo u where u.ratingUser.username =:username").setParameter("username", username);
+		return (List<UserRatingBo>) query.getResultList();
+	}
+
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -158,5 +185,6 @@ public class EntityDaoImpl implements EntityDao {
 		// TODO Auto-generated method stub
 		
 	}
+
 
 }

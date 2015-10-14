@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.foosball.web.bean.jpa.TeamBo;
 import com.foosball.web.bean.jpa.UserBo;
+import com.foosball.web.bean.jpa.UserRatingBo;
 import com.foosball.web.model.User;
 
 public interface EntityDao {
@@ -15,6 +16,7 @@ public interface EntityDao {
 	UserBo create(User entity);
 	void delete( Integer id );
 	UserBo getUser(String userName);
+	void save(UserRatingBo userRatings);
 	
 	int resetPassword(String username, String password);
 	
@@ -30,4 +32,7 @@ public interface EntityDao {
 	String getFlagToAllowTeamNameUpdate();
 	String getFlagToAllowCreateUser();
 	int updateFlag(String flag, String value);
+	UserRatingBo getUserRating(int ratedUserId, int ratingUserId);
+	List<UserRatingBo> getUserRatings(String username);
+	
 }

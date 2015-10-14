@@ -110,11 +110,11 @@ public class EntityServiceImpl implements EntityService {
 	
 	@Override
 	public List<Rating> getUsersToRate(String username) {
-		UserBo user = entityDao.getUser(username);
-		if (ArrayUtils.isEmpty(user.getRatedUsers().toArray())) {
+		List<UserRatingBo> userRatings = entityDao.getUserRatings(username);
+		if (ArrayUtils.isEmpty(userRatings.toArray())) {
 			return createDefaultRatings(entityDao.otherUsers(username));
 		}
-		return convertRatingBoToVo(user.getRatedUsers());
+		return convertRatingBoToVo(userRatings);
 	}
 	
 	@Override
@@ -125,18 +125,22 @@ public class EntityServiceImpl implements EntityService {
 		}
 		for (Rating rating : ratings) {
 			UserBo ratedUserBo = entityDao.getUser(rating.getUserId());
-			UserRatingBo userRating = new UserRatingBo();
-			userRating.setRatedUser(ratedUserBo);
-			userRating.setRatingUser(ratingUserBo);
-			if (ratingUserBo.getRatedUsers().contains(userRating)) {
+			UserRatingBo userRating = entityDao.getUserRating(ratedUserBo.getId(), ratingUserBo.getId());		
+			if (userRating == null) {
+				userRating = new UserRatingBo();
+				userRating.setRatedUser(ratedUserBo);
+				userRating.setRatingUser(ratingUserBo);
+			}			
+			/*if (ratingUserBo.getRatedUsers().contains(userRating)) {
 				int ratedIndex = ratingUserBo.getRatedUsers().indexOf(userRating);
 				userRating = ratingUserBo.getRatedUsers().get(ratedIndex);
 			} else {
 				ratingUserBo.getRatedUsers().add(userRating);
-			}
+			}*/
 			userRating.setRating(rating.getRating());
+			entityDao.save(userRating);
 		}
-		entityDao.save(ratingUserBo);
+	
 		return true;
 	}
 	
