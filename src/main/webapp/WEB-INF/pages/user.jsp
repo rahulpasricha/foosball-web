@@ -193,11 +193,11 @@
 												var tableHtml = '<table name="opponentTable" class="table table-bordered table-striped table-hover table-condensed"><thead><tr><th>Player</th><th>Rating</th></tr></thead><tbody>';
 												 $.each(result, function (index, value) {
 													 var rating = value.rating;
-													 var comboBoxHtml = '<select class="opponent" name="opponent' + index + '"><option value="3" ' + (rating == 0 ? ' selected="selected">' : '>') + 'UNKNOWN</option>' +
+													 var comboBoxHtml = '<select class="opponent" name="opponent' + index + '"><option value="3" ' + ((rating == 0 || rating == 3) ? ' selected="selected">' : '>') + 'UNKNOWN</option>' +
 															 			'<option value="1" ' + (rating == 1 ? ' selected="selected">' : '>') + 'BEGINNER</option>' +
 																	 	'<option value="2" ' + (rating == 2 ? ' selected="selected">' : '>') + 'INTERMEDIATE</option>' +
-																		'<option value="4" ' + (rating == 3 ? ' selected="selected">' : '>') + 'ADVANCED</option>' +
-																		'<option value="5" ' + (rating == 4 ? ' selected="selected">' : '>') + 'EXPERT</option></select>';
+																		'<option value="4" ' + (rating == 4 ? ' selected="selected">' : '>') + 'ADVANCED</option>' +
+																		'<option value="5" ' + (rating == 5 ? ' selected="selected">' : '>') + 'EXPERT</option></select>';
 													 tableHtml += '<tr><td>' + value.foosballPlayerName + '</td><td>' + comboBoxHtml + '</td></tr>';
 												 });
 												 tableHtml += '</tbody></table>';
@@ -224,6 +224,7 @@
 										
 										$('#playerRatingsForm').submit(function(e) {
 											e.preventDefault();
+											$('#ratingsMessageDiv').html('');
 											$('.opponent').each(function (index, value) {
 												resultsFromServer[index].rating = $(this).val();												
 											});
@@ -235,7 +236,6 @@
 												url: 'updateRatings',
 												dataType: 'json',												
 												success: function(result) {
-													$('#ratingsMessageDiv').html('');
 													$('#ratingsMessageDiv').append('<div class="alert alert-info" role="alert"><strong>Ratings Updated Successfully.</strong></div>');
 												},error:function(jqXHR, textStatus, errorThrown){
 													var errorFromServer;

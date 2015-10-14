@@ -1,6 +1,7 @@
 package com.foosball.web.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -13,6 +14,7 @@ public class Team implements Serializable {
 	@Size(max = 40)
 	private String name;
 	@Size(max = 40)
+	private List<String> teamMembers;
 	
 	public Team(String name) {
 		this.name = name;
@@ -33,6 +35,12 @@ public class Team implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	
+
+	public List<String> getTeamMembers() {
+		return teamMembers;
+	}
+
+	public void setTeamMembers(List<String> teamMembers) {
+		this.teamMembers = teamMembers;
+	}
 }
