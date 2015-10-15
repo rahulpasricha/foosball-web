@@ -18,7 +18,7 @@ import com.foosball.web.model.User;
 
 @Repository
 public class EntityDaoImpl implements EntityDao {
-	
+
 	@PersistenceContext
 	EntityManager entityManager;
 
@@ -29,14 +29,14 @@ public class EntityDaoImpl implements EntityDao {
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<UserBo> getAllFoosballusers() {
-		Query query = getEntityManager().createQuery("SELECT u from UserBo u");
-		return (List<UserBo>) query.getResultList();
+		Query query = getEntityManager().createQuery("SELECT u from UserBo u where username != 'admin'");
+		return query.getResultList();
 	}
-	
+
 	@Override
 	public UserBo getUser(String userName) {
 		UserBo user;
@@ -49,7 +49,7 @@ public class EntityDaoImpl implements EntityDao {
 		}
 		return user;
 	}
-	
+
 	@Override
 	public UserBo getUser(Integer id) {
 		UserBo user;
@@ -62,14 +62,14 @@ public class EntityDaoImpl implements EntityDao {
 		}
 		return user;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<UserBo> otherUsers(String username) {
 		Query query = getEntityManager().createQuery("SELECT u from UserBo u where u.username != :username and u.role = :role")
 						.setParameter("username", username)
 						.setParameter("role", "ROLE_USER");
-		return (List<UserBo>) query.getResultList();
+		return query.getResultList();
 	}
 
 
@@ -79,13 +79,13 @@ public class EntityDaoImpl implements EntityDao {
 		getEntityManager().flush();
 		return entity;
 	}
-	
+
 	@Override
 	public void save(UserRatingBo userRatings) {
 		getEntityManager().persist(userRatings);
 		getEntityManager().flush();
 	}
-	
+
 	@Override
 	public UserRatingBo getUserRating(int ratedUserId, int ratingUserId) {
 		UserRatingBo userRating;
@@ -98,35 +98,35 @@ public class EntityDaoImpl implements EntityDao {
 		}
 		return userRating;
 	}
-	
+
 	@Override
 	public List<UserRatingBo> getUserRatings(String username) {
 		Query query = getEntityManager().createQuery("from UserRatingBo u where u.ratingUser.username =:username").setParameter("username", username);
-		return (List<UserRatingBo>) query.getResultList();
+		return query.getResultList();
 	}
 
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<TeamBo> getAllTeams() {
 		Query query = getEntityManager().createQuery("SELECT t from TeamBo t order by id");
-		return (List<TeamBo>) query.getResultList();
+		return query.getResultList();
 	}
-	
+
 	@Override
 	public int resetPassword(String username, String password) {
 		Query query = getEntityManager().createQuery("UPDATE UserBo u set u.password = :password WHERE u.username = :username");
 		query.setParameter("username", username);
 		query.setParameter("password", password);
-		int count = query.executeUpdate();		
+		int count = query.executeUpdate();
 		return count;
 	}
-	
+
 	@Override
 	public String getLatestJsonResultSet() {
 		return getEntityManager().createNativeQuery("").getSingleResult().toString();
 	}
-	
+
 	@Override
 	public String getJsonResultSet() {
 		return (String) getEntityManager().createNativeQuery("SELECT JSONRESULTSTRING FROM FOOSBALL.JSON_RESULTSET").getSingleResult();
@@ -136,7 +136,7 @@ public class EntityDaoImpl implements EntityDao {
 	public String updateJsonResultSet(String json) {
 		getEntityManager().createNativeQuery("UPDATE FOOSBALL.JSON_RESULTSET SET JSONRESULTSTRING = :json, CREATEDON = :today")
 			.setParameter("json", json).setParameter("today", new Date()).executeUpdate();
-		
+
 		return getJsonResultSet();
 	}
 
@@ -149,19 +149,19 @@ public class EntityDaoImpl implements EntityDao {
 	public String getFlagToAllowTeamNameUpdate() {
 		return (String) getEntityManager().createNativeQuery("SELECT VALUE FROM FOOSBALL.APPCONFIG WHERE NAME = 'ALLOW_TEAM_UPDATE'").getSingleResult();
 	}
-	
+
 	@Override
 	public String getFlagToAllowCreateUser() {
 		return (String) getEntityManager().createNativeQuery("SELECT VALUE FROM FOOSBALL.APPCONFIG WHERE NAME = 'ALLOW_CREATE_USER'").getSingleResult();
 	}
-	
+
 	@Override
 	public int updateFlag(String flag, String value) {
 		return getEntityManager().createNativeQuery("UPDATE FOOSBALL.APPCONFIG SET VALUE = :value WHERE NAME = :name")
 			.setParameter("value", value)
 			.setParameter("name", flag).executeUpdate();
 	}
-	
+
 	@Override
 	public UserBo findById(Integer id) {
 		// TODO Auto-generated method stub
@@ -183,7 +183,7 @@ public class EntityDaoImpl implements EntityDao {
 	@Override
 	public void delete(Integer id) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 
