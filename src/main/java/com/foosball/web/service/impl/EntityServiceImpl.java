@@ -110,11 +110,24 @@ public class EntityServiceImpl implements EntityService {
 	
 	@Override
 	public List<Rating> getUsersToRate(String username) {
-		List<UserRatingBo> userRatings = entityDao.getUserRatings(username);
-		if (ArrayUtils.isEmpty(userRatings.toArray())) {
-			return createDefaultRatings(entityDao.otherUsers(username));
+		UserBo ratingUser = entityDao.getUser(username);
+		if (ratingUser == null) {
+			return null;
 		}
-		return convertRatingBoToVo(userRatings);
+		
+		List<Rating> ratings = new ArrayList();
+		for (UserBo foosballUser : entityDao.otherUsers(username)) {
+			Rating rating;
+			UserRatingBo ratedUser = entityDao.getUserRating(foosballUser.getId(), ratingUser.getId());
+			if (ratedUser == null) {
+				rating = convertToRating(foosballUser.getId(), foosballUser.getFirstName(), foosballUser.getLastName(), 0);
+			} else {
+				rating = convertToRating(ratedUser.getRatedUser().getId(), ratedUser.getRatedUser().getFirstName(), ratedUser.getRatedUser().getLastName(), ratedUser.getRating());
+			}
+			ratings.add(rating);
+		}
+		return ratings;
+		
 	}
 	
 	@Override
@@ -131,17 +144,19 @@ public class EntityServiceImpl implements EntityService {
 				userRating.setRatedUser(ratedUserBo);
 				userRating.setRatingUser(ratingUserBo);
 			}			
-			/*if (ratingUserBo.getRatedUsers().contains(userRating)) {
-				int ratedIndex = ratingUserBo.getRatedUsers().indexOf(userRating);
-				userRating = ratingUserBo.getRatedUsers().get(ratedIndex);
-			} else {
-				ratingUserBo.getRatedUsers().add(userRating);
-			}*/
 			userRating.setRating(rating.getRating());
 			entityDao.save(userRating);
 		}
 	
 		return true;
+	}
+	
+	private Rating convertToRating(Integer userId, String firstname, String lastname, int rating) {
+		Rating userRating = new Rating();
+		userRating.setUserId(userId);
+		userRating.setFoosballPlayerName(String.format("%s %s", firstname, lastname));
+		userRating.setRating(rating);
+		return userRating;
 	}
 	
 	private List<Rating> convertRatingBoToVo(List<UserRatingBo> ratedUsers) {
