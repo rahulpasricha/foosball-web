@@ -65,6 +65,9 @@
 				background-color: #FFFD9C;
 				border-color: #F1E157;
 			}
+			#imageDiv {
+				margin-left:-30px;
+			}
         </style>
     </head>
     <body>
@@ -90,7 +93,7 @@
 			</nav>
 		</div>
 		<br>
-        <div class="container-fluid">		
+        <div class="container-fluid">
             <div class="row">			
                 <div class="col-sm-7 col-xs-offset-1">
 					<div class="row">
@@ -195,13 +198,21 @@
 			<div class="row">
 				<div class="col-sm-4 col-xs-offset-1">
 					<div class="row">
-						<h2><span class="label label-info">Teams</span></h2>
+						<div class="row">
+							<h2><span class="label label-info">Teams</span></h2>
+						</div>
+						<br>
+						<div class="row" id="listOfTeams">
+						</div>
+						<div class="row" id="teamMessageDiv">
+						</div>
 					</div>
-					<br>
-					<div class="row" id="listOfTeams">
-					</div>
-					<div class="row" id="teamMessageDiv">
-					</div>
+					<hr>
+					<div class="row" id="imageDiv">
+		        		<h2><span class="label label-info">Tournament Prize</span></h2>
+		        		<br>
+		        		<img src ="resources/trophy.JPG" height="440" width="490" style="opacity:0.85;"></img>
+		        	</div>
 				</div>
 				<div class="col-sm-4 col-xs-offset-1">
 					<div class="row">
