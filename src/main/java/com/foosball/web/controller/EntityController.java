@@ -113,6 +113,16 @@ public class EntityController {
 		return count.toString();
 	}
 	
+	@RequestMapping(value = "/getTeamName/{username}", method = RequestMethod.GET)
+	public @ResponseBody String getTeamName(@PathVariable("username") String username) {
+		return entityService.getTeamName(username);
+	}
+	
+	@RequestMapping(value = "/updateTeamName/{username}/{teamname}", method = RequestMethod.POST)
+	public @ResponseBody boolean updateTeamName(@PathVariable("username") String username, @PathVariable("teamname") String teamName) {
+		return entityService.updateTeamName(username, teamName);
+	}
+	
 	@RequestMapping(value = "/foosballuser/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody

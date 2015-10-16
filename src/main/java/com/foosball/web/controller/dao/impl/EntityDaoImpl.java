@@ -186,5 +186,29 @@ public class EntityDaoImpl implements EntityDao {
 
 	}
 
+	@Override
+	public String getTeamName(String username) {
+		String teamName;
+		try {
+			teamName = (String) getEntityManager()
+					.createNativeQuery(
+							"select teamname from foosball.team t join foosball.foosballuser "
+									+ "u on t.id = u.team_id where u.username = :username")
+					.setParameter("username", username).getSingleResult();
+		} catch (NoResultException e) {
+			teamName = null;
+		}
+		return teamName;
+	}
+
+	@Override
+	public boolean updateTeamName(String username, String teamName) {
+		UserBo userBo = (UserBo) getEntityManager().createQuery(
+				"from UserBo u where u.username = :username").setParameter("username", username).getSingleResult();
+		userBo.getTeam().setName(teamName);
+		getEntityManager().flush();
+		return true;
+	}
+
 
 }

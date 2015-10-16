@@ -349,7 +349,7 @@
 						<h4><small>Use this section to trigger team selection</small></h4>
 						<br>
 						<div class="row">
-							<div class="col-xs-12 col-md-6"><button id="buildTeamButton" type="submit" class="btn btn-success btn-lg btn-block" data-loading-text="Building Teams...  ">Draw Teams</button></div>
+							<div class="col-xs-12 col-md-6"><button id="buildTeamButton" type="submit" class="btn btn-success btn-lg btn-block" data-loading-text="Drawing...   ">Draw Teams</button></div>
 						</div>
 					</form>
 					<br>

@@ -34,4 +34,7 @@ public interface EntityService {
 	int updateFlag(String flag, String value);
 	
 	Integer buildTeam();
+	
+	String getTeamName(String username);
+	boolean updateTeamName(String username, String teamName);
 }

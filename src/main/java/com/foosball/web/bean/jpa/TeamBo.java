@@ -1,12 +1,16 @@
 package com.foosball.web.bean.jpa;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -20,8 +24,11 @@ public class TeamBo implements Serializable {
 	@Column(name = "ID", nullable = false)
 	private Integer id;
 	
-	@Column(name = "NAME", length = 40)
+	@Column(name = "TEAMNAME", length = 40)
 	private String name;
+	
+	@OneToMany(mappedBy="team")
+	private List<UserBo> users;
 	
 	public TeamBo() {
 		super();
@@ -42,4 +49,13 @@ public class TeamBo implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public List<UserBo> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<UserBo> users) {
+		this.users = users;
+	}
+	
 }

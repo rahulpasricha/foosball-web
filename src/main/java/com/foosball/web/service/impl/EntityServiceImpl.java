@@ -101,9 +101,11 @@ public class EntityServiceImpl implements EntityService {
 
 		List<Team> allTeams = new ArrayList<Team>();
 		for (TeamBo eachTeam : teams) {
-			if (eachTeam.getName() != null) {
-				allTeams.add(new Team(eachTeam.getName()));
+			Team team = new Team(eachTeam.getName());
+			for (UserBo userBo : eachTeam.getUsers()) {
+				team.getTeamMembers().add(userBo.getFirstName() + " " + userBo.getLastName());
 			}
+			allTeams.add(team);
 		}
 
 		return allTeams;
@@ -260,6 +262,16 @@ public class EntityServiceImpl implements EntityService {
 		return entityDao.updateFlag(flag, value);
 
 	}
+	
+	@Override
+	public String getTeamName(String username) {
+		return entityDao.getTeamName(username);
+	}
+
+	@Override
+	public boolean updateTeamName(String username, String teamName) {
+		return entityDao.updateTeamName(username, teamName);
+	}
 
 	@Override
 	public User findById(Integer id) {
@@ -294,7 +306,7 @@ public class EntityServiceImpl implements EntityService {
     }
 
     private void groupUsersInTeams(UserBo[] shuffledUsers) {
-        List< Integer > blacklistTeamIds = Arrays.asList(2, 6, 10, 14);
+        List< Integer > blacklistTeamIds = Arrays.asList(1, 5, 9); // this is index, corresponding team id is index + 1
         List< TeamBo > teams = entityDao.getAllTeams();
         int teamIndex = 0;
         int start = 0;

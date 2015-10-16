@@ -68,6 +68,10 @@
 			#imageDiv {
 				margin-left:-30px;
 			}
+			.label-default {
+			    background-color: #CDCEC6;
+			    color: black;
+			}
         </style>
     </head>
     <body>
@@ -164,9 +168,24 @@
 											dataType: 'json',
 											success: function(result) {
 												$('#teamMessageDiv').html('');
-												var tableHtml = '<table class="table table-bordered table-striped table-hover"><th>Team Name</th></tr></thead><tbody>';
+												var tableHtml = '<table class="table table-bordered table-striped table-hover"><th>Team Name</th><th>Members</th></thead><tbody>';
 												 $.each(result, function (index, value) {
-													 tableHtml += '<tr><td>' + value.name + '</td>';
+													 var teamMembers = '';
+													 var listOfTeamMembers = value.teamMembers;
+													 var teamName = value.name;
+													 if (listOfTeamMembers == null || listOfTeamMembers.length == 0) {
+														 teamMembers += '<span class="label label-default" style="font-size:15px;font-weight:normal;font-style:italic;">No Players</span>'
+													 }
+													 $.each(listOfTeamMembers, function (index2, value2) {
+														 var nameString = '';
+														 if (index2 == 0) {
+															 nameString += '<span class="label label-primary" style="font-size:15px;">' + value2 + '</span>';
+														 } else {
+															 nameString += '<span class="label label-success" style="font-size:15px;">' + value2 + '</span>';
+														 }
+														 teamMembers += nameString + ' ';
+													 });
+													 tableHtml += '<tr><td><strong>' + '<span class="label label-default" id="teamNameSpan" style="font-size:15px">' + teamName + '</span>' + '</strong></td><td>' + teamMembers + '</td></tr>';
 												 });
 												 tableHtml += '</tbody></table>';
 												 $(tableHtml).appendTo($('#listOfTeams'));

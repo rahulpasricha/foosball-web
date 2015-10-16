@@ -140,6 +140,17 @@
 						<div class="row">
 							<div id="minimal">
 								<script>
+								
+									function getTeamName(username) {
+										$.ajax({
+											type: 'GET',
+											url: 'getTeamName/' + username ,
+											success: function(result) {
+												$("#currentTeamName").html(result);
+											}							
+									  	});
+									};
+								
 									$(document).ready(function() {
 										
 										//Handles menu drop down
@@ -241,6 +252,9 @@
 													var errorFromServer;
 													if(jqXHR.responseText !== ''){
 														errorFromServer = jqXHR.responseText;
+														if (errorFromServer.indexOf("<html>") >= 0) {
+															errorFromServer = errorThrown;
+														}
 												    } else {
 												    	errorFromServer = errorThrown;
 												    }
@@ -250,24 +264,40 @@
 											
 										});
 										
-										$.fn.serializeObject = function()
-										{
-										    var o = {};
-										    var a = this.serializeArray();
-										    $.each(a, function() {
-										        if (o[this.name] !== undefined) {
-										            if (!o[this.name].push) {
-										                o[this.name] = [o[this.name]];
-										            }
-										            o[this.name].push(this.value || '');
-										        } else {
-										            o[this.name] = this.value || '';
-										        }
-										    });
-										    return o;
-										};
+										$('#updateTeamNameForm').submit(function(e) {
+											e.preventDefault();
+											$('#updateTeamNameMessageDiv').html('');
+											
+											$.ajax ({
+												type: 'POST',
+												contentType: 'application/json; charset=utf-8',
+												url: 'updateTeamName/' + loggedInUser + '/' + $('#teamName').val(),
+												dataType: 'json',												
+												success: function(result) {
+													$('#updateTeamNameMessageDiv').append('<div class="alert alert-info" role="alert"><strong>Team Name Updated Successfully.</strong></div>');
+													getTeamName(loggedInUser);
+												},error:function(jqXHR, textStatus, errorThrown){
+													var errorFromServer;
+													if(jqXHR.responseText !== ''){
+														errorFromServer = jqXHR.responseText;
+														if (errorFromServer.indexOf("<html>") >= 0) {
+															errorFromServer = errorThrown;
+														}
+												    } else {
+												    	errorFromServer = errorThrown;
+												    }
+													$('#updateTeamNameMessageDiv').append('<div class="alert alert-danger" role="alert">Failed : <strong>' + errorFromServer + '</strong></div>');
+												}						
+											});	
+											
+										});
+										
+										$(function() {
+											getTeamName(loggedInUser);
+										});
 										
 									});
+									
 								</script>
 							</div>
 						</div>
@@ -317,7 +347,7 @@
 								<div class="col-xs-12 col-md-6"><input id="updateTeamNameButton" type="submit" value="Update" class="btn btn-success btn-block btn-lg"></div>
 							</div>
 							<br>
-							<div class="form-group" id="messageDiv">
+							<div class="form-group" id="updateTeamNameMessageDiv">
 								
 							</div>						
 						</form>

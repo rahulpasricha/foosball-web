@@ -35,4 +35,7 @@ public interface EntityDao {
 	UserRatingBo getUserRating(int ratedUserId, int ratingUserId);
 	List<UserRatingBo> getUserRatings(String username);
 	
+	String getTeamName(String username);
+	boolean updateTeamName(String username, String teamName);
+	
 }
