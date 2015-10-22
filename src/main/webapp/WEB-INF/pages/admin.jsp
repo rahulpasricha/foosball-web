@@ -266,14 +266,18 @@
 													contentType: 'application/json; charset=utf-8',
 													dataType: 'json',
 													success: function(result) {
-														$btn.button('reset');
-														$('#buildTeamMessageDiv').append('<div class="alert alert-info" role="alert"><strong>Updated!!!</strong></div>');
+														setTimeout(function() {
+															$btn.button('reset');
+															$('#buildTeamMessageDiv').append('<div class="alert alert-info" role="alert"><strong>Updated!!!</strong></div>');
+														}, 30000);
 													},error:function(jqXHR, textStatus, errorThrown) {
 														$btn.button('reset');
 														$('#buildTeamMessageDiv').append('<div class="alert alert-danger" role="alert"><strong>Error : ' + errorThrown + ' </strong></div>');
 													}											
 												});
 										 });
+										 
+										 $("#buildTeamButton").prop("disabled", true);
 										 
 									});
 								</script>

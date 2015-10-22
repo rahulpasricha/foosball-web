@@ -31,7 +31,7 @@
 		
 		<link rel='stylesheet' type='text/css' href='resources/respondjs/normalize.css' />
         <style type="text/css">
-            div.jQBracket .team div.label {font-family: Arial;font-size: 10px;font-weight: bold;color:black;margin-top: 4px;margin-left: 6px;}
+            div.jQBracket .team div.label {font-family: Arial;font-size: 10px;font-weight: bold;color:black;margin-top: 4px;margin-left: 6px;width: auto;}
             div.jQBracket .team {width: 110px;}
             .navbar-default {margin-bottom:0;background:#ffcc00;z-index:2000;border-bottom: 0 none #d40511;box-shadow: 0 0 2px #d40511;}
 			.navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand {
