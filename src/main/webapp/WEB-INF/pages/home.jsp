@@ -75,26 +75,28 @@
         </style>
     </head>
     <body>
-		<div class="container-fluid">
-		  <nav class="navbar navbar-default navbar-static-top" role="navigation">
-               <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#"><img src="resources/dhl_logo.png">
-                    </a>
-                </div>
-                <div class="collapse navbar-collapse" role="navigation">
-					<ul class="nav navbar-nav">
-						<li class="active"><a href="home">DHL Foosball Tournament Home</a></li>
-						<li><a href="signup">Sign In</a></li>
-						<li><a href="resetpassword">Reset Password</a></li>
-				   </ul>
-				</div>           
-			</nav>
+    	<div class="container-fluid">
+	    	<header class="navbar navbar-default bs-docs-nav navbar-static-top" role="banner"> 
+				<div class="container-fluid">
+		               <div class="navbar-header">
+		                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".bs-navbar-collapse">
+		                    <span class="sr-only">Toggle navigation</span>
+		                    <span class="icon-bar"></span>
+		                    <span class="icon-bar"></span>
+		                    <span class="icon-bar"></span>
+		                    </button>
+		                    <a class="navbar-brand" href="#"><img src="resources/dhl_logo.png">
+		                    </a>
+		                </div>
+		           <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+							<ul class="nav navbar-nav">
+								<li class="active"><a href="home">DHL Foosball Tournament Home</a></li>
+								<li><a href="signup">Sign In</a></li>
+								<li><a href="resetpassword">Reset Password</a></li>
+						   </ul>
+					</nav>
+				</div>
+			</header>
 		</div>
 		<br>
         <div class="container-fluid">
